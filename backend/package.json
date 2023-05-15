@@ -1,0 +1,38 @@
+{
+  "name": "travel-insights-backend",
+  "version": "1.0.0",
+  "description": "Backend for the TravelInsights App",
+  "main": "dist/index.js",
+  "author": "Martin Schmidt",
+  "license": "MIT",
+  "private": true,
+  "scripts": {
+    "build": "tsc",
+    "gen:openapi": "tsoa spec-and-routes",
+    "lint": "eslint --fix src/**/*.ts",
+    "run:watch": "nodemon src/index.ts",
+    "start:dev": "concurrently \"yarn:tsoa:watch\" \"yarn:run:watch\"",
+    "test": "jest --coverage",
+    "tsoa:watch": "nodemon --watch src/api/ --exec tsoa spec-and-routes"
+  },
+  "devDependencies": {
+    "@tsconfig/node18": "^2.0.1",
+    "@types/cors": "^2.8.13",
+    "@types/express": "^4.17.17",
+    "@types/node": "^20.1.4",
+    "eslint": "^8.40.0",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "nodemon": "^2.0.22",
+    "ts-node": "^10.9.1",
+    "typescript": "^5.0.4"
+  },
+  "dependencies": {
+    "@types/swagger-ui-express": "^4.1.3",
+    "axios": "^1.4.0",
+    "cors": "^2.8.5",
+    "express": "^4.18.2",
+    "swagger-ui-express": "^4.6.3",
+    "tsoa": "^5.1.1"
+  }
+}

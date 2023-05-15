@@ -1,0 +1,19 @@
+{
+  "entryFile": "src/index.ts",
+  "noImplicitAdditionalProperties": "throw-on-extras",
+  "controllerPathGlobs": [
+	"src/api/**/*.ts"
+  ],
+  "spec": {
+	"basePath": "/api",
+	"outputDirectory": "src",
+	"specVersion": 3,
+	"specFileBaseName": "openapi.generated"
+  },
+  "routes": {
+	"basePath": "/api",
+	"middleware": "express",
+	"routesFileName": "routes.generated.ts",
+	"routesDir": "src"
+  }
+}
