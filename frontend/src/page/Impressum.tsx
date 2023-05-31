@@ -1,7 +1,7 @@
-import { useContext } from "react";
+import {ReactElement, useContext} from "react";
 import { PageState, PageStateContext } from "../App";
 
-const Impressum = (): JSX.Element => {    
+const Impressum = (): ReactElement => {
     const { setState } = useContext(PageStateContext);
     return (
         <>Impressum

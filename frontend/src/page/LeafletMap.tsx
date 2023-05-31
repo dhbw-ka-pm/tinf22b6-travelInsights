@@ -1,11 +1,11 @@
 import { LatLngBoundsLiteral } from "leaflet";
-import { useContext } from "react";
+import {ReactElement, useContext} from "react";
 import { MapContainer, SVGOverlay, TileLayer } from "react-leaflet";
 import { PageState, PageStateContext } from "../App";
-import { Button, Grid, InputAdornment, Paper, TextField, Typography } from "@mui/material";
+import { Button, Grid, InputAdornment, Paper, TextField } from "@mui/material";
 import { Search } from "@mui/icons-material";
 
-const LeafletMap = (): JSX.Element => {
+const LeafletMap = (): ReactElement => {
     const { setState } = useContext(PageStateContext);
 
     const position = { lat: 51.505, lng: - 0.09 }
