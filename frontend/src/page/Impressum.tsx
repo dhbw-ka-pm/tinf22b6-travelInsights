@@ -1,7 +1,13 @@
-import { PageState } from "../App";
+import { useContext } from "react";
+import { PageState, PageStateContext } from "../App";
 
-const Impressum = (props: any): JSX.Element => {
-    return (<>Impressum <button onClick={props(PageState.WELCOME)}>Test</button></>);
+const Impressum = (): JSX.Element => {    
+    const { setState } = useContext(PageStateContext);
+    return (
+        <>Impressum
+            <button onClick={() => setState(PageState.WELCOME)}>to Welcome</button>
+        </>
+    )
 }
 
 export default Impressum;

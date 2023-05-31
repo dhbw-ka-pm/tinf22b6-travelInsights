@@ -1,6 +1,13 @@
-import { useEffect, useState } from 'react';
+import { createContext, useEffect, useState } from 'react';
 import './App.css';
 import Impressum from './page/Impressum';
+import LeafletMap from './page/LeafletMap';
+import Welcome from './page/Welcome';
+
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
 
 export enum PageState {
   WELCOME,
@@ -8,26 +15,30 @@ export enum PageState {
   IMPRESSUM
 }
 
+export const PageStateContext = createContext<{state: PageState, setState: Function}>({state: PageState.MAP, setState: () => {}});
+
 function App() {
-  const [currentState, setCurrentState] = useState<PageState>(PageState.WELCOME);
+  const [stateProvider, setCurrentState] = useState<PageState>(PageState.MAP);
   const [content, setContent] = useState<JSX.Element>(<></>)
 
   useEffect(() => {
-    switch (currentState) {
+    switch (stateProvider) {
       case PageState.WELCOME:
-        setContent(<>Welcome
-          <button onClick={() => setCurrentState(PageState.MAP)}>Show Map</button></>)
+        setContent(<Welcome />)
         break;
       case PageState.MAP:
-        setContent(<>Map
-          <button onClick={() => setCurrentState(PageState.IMPRESSUM)}>Show Impressum</button></>)
+        setContent(<LeafletMap />)
         break;
       case PageState.IMPRESSUM:
-        setContent(<Impressum prop={setContent}/>)
+        setContent(<Impressum />)
         break;
     }
-  }, [currentState]);
+  }, [stateProvider]);
 
-  return (content);
+  return (
+    <PageStateContext.Provider value={{ state: stateProvider, setState: setCurrentState }}>
+      {content}
+    </PageStateContext.Provider>
+  );
 }
 export default App;

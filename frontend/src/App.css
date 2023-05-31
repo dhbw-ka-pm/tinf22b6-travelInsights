@@ -13,7 +13,9 @@
   }
 }
 
-.leaflet-container { height: 100vh }
+.leaflet-container {
+  height: 100vh;
+}
 
 .App-header {
   background-color: #282c34;
@@ -34,6 +36,7 @@
   from {
     transform: rotate(0deg);
   }
+
   to {
     transform: rotate(360deg);
   }
