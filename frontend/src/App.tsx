@@ -1,26 +1,44 @@
-import React from 'react';
-import logo from './logo.svg';
+import { createContext, useEffect, useState } from 'react';
 import './App.css';
+import Impressum from './page/Impressum';
+import LeafletMap from './page/LeafletMap';
+import Welcome from './page/Welcome';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+import '@fontsource/roboto/300.css';
+import '@fontsource/roboto/400.css';
+import '@fontsource/roboto/500.css';
+import '@fontsource/roboto/700.css';
+
+export enum PageState {
+  WELCOME,
+  MAP,
+  IMPRESSUM
 }
 
+export const PageStateContext = createContext<{state: PageState, setState: Function}>({state: PageState.MAP, setState: () => {}});
+
+function App() {
+  const [stateProvider, setCurrentState] = useState<PageState>(PageState.MAP);
+  const [content, setContent] = useState<JSX.Element>(<></>)
+
+  useEffect(() => {
+    switch (stateProvider) {
+      case PageState.WELCOME:
+        setContent(<Welcome />)
+        break;
+      case PageState.MAP:
+        setContent(<LeafletMap />)
+        break;
+      case PageState.IMPRESSUM:
+        setContent(<Impressum />)
+        break;
+    }
+  }, [stateProvider]);
+
+  return (
+    <PageStateContext.Provider value={{ state: stateProvider, setState: setCurrentState }}>
+      {content}
+    </PageStateContext.Provider>
+  );
+}
 export default App;
