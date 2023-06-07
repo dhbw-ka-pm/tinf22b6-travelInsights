@@ -1,20 +1,10 @@
 {
-  "devDependencies": {
-    "lint-staged": "^10.5.3",
-    "prettier": "^2.2.1"
-  },
-  "lint-staged": {
-    "*.{ts,tsx,js,jsx}": "eslint",
-    "*.{ts,tsx,js,jsx,json,yaml,md}": "prettier --check"
-  },
   "private": true,
   "scripts": {
-    "gen": "yarn workspace travel-insights-backend gen:openapi && yarn workspace travel-insights-frontend gen",
-    "prettier": "prettier --write .",
-    "lint": "eslint . --cache"
+    "gen": "yarn workspace travel-insights-backend gen:openapi && yarn workspace travel-insights-frontend gen"
   },
   "workspaces": [
-    "backend",
-    "frontend"
+    "frontend",
+    "backend"
   ]
 }

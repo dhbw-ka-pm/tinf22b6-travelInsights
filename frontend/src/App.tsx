@@ -1,24 +1,25 @@
-import { createContext, useEffect, useState } from "react";
-import "./App.css";
-import Impressum from "./page/Impressum";
-import LeafletMap from "./page/LeafletMap";
-import Welcome from "./page/Welcome";
-import ResponsiveAppBar from "./components/AppBar";
-import Destinations from "./page/Destinations";
+import * as React from 'react';
+import { createContext, useEffect, useState } from 'react';
+import './App.css';
+import Impressum from './page/Impressum';
+import LeafletMap from './page/LeafletMap';
+import Welcome from './page/Welcome';
+import ResponsiveAppBar from './components/AppBar';
+import Destinations from './page/Destinations';
 
 export enum PageState {
   WELCOME,
   DESTINATIONS,
   MAP,
-  IMPRESSUM,
+  IMPRESSUM
 }
 
 export const PageStateContext = createContext<{
   state: PageState;
-  setState: Function;
+  setState: (state: PageState) => void;
 }>({ state: PageState.MAP, setState: () => {} });
 
-function App() {
+function App(): React.ReactElement {
   const [stateProvider, setCurrentState] = useState<PageState>(PageState.MAP);
   const [content, setContent] = useState<JSX.Element>(<></>);
 
