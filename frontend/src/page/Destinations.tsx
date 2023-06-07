@@ -1,7 +1,7 @@
-import { ReactElement } from "react";
-import Typography from "@mui/material/Typography";
+import * as React from 'react';
+import Typography from '@mui/material/Typography';
 
-const Destinations = (): ReactElement => {
+const Destinations = (): React.ReactElement => {
   return (
     <>
       <Typography>Destinations</Typography>

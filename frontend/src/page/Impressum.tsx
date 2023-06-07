@@ -1,9 +1,10 @@
-import {ReactElement, useContext} from "react";
-import { PageState, PageStateContext } from "../App";
+import * as React from 'react';
+import { useContext } from 'react';
+import { PageState, PageStateContext } from '../App';
 
-const Impressum = (): ReactElement => {
-    const { setState } = useContext(PageStateContext);
-    return (
+const Impressum = (): React.ReactElement => {
+  const { setState } = useContext(PageStateContext);
+  return (
         <><h1>Impressum</h1><br/>
             Angaben gemäß § 5 TMG:<br/>
             Max Mustermann<br/>
@@ -33,7 +34,7 @@ const Impressum = (): ReactElement => {
             Urheberrecht<br/>
             Die durch die Seitenbetreiber erstellten Inhalte und Werke auf diesen Seiten unterliegen dem deutschen Urheberrecht. Die Vervielfältigung, Bearbeitung, Verbreitung und jede Art der Verwertung außerhalb der Grenzen des Urheberrechtes bedürfen der schriftlichen Zustimmung des jeweiligen Autors bzw. Erstellers.<br/>
         </>
-    )
-}
+  );
+};
 
 export default Impressum;
