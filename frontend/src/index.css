@@ -1,13 +1,82 @@
 body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+    margin: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.blurFilter {
+    position: fixed;
+    backdrop-filter: blur(10px);
+    z-index: 10;
+    width: 100%;
+    height: 100%;
+}
+
+.headerLandingPage {
+    background-color: orange;
+    width: 100%;
+    height: 15vh;
+}
+
+.headerLandingPage img {
+    height: 15vh;
+    display: block;
+    margin: 0 auto;
+}
+
+.footerLandingPage {
+    position: fixed;
+    bottom: 0;
+    background-color: orange;
+    width: 100%;
+    height: 15vh;
+    z-index: 999;
+}
+
+.searchBar {
+    width: fit-content;
+    display: block;
+    margin: 25vh auto;
+}
+
+.searchBar input {
+    width: 25rem;
+    height: 3rem;
+    border: 1px solid black;
+    border-radius: 10px 10px 10px;
+    font-size: 1.5rem;
+}
+
+.searchBar button {
+    width: 2rem;
+    height: 2rem;
+}
+
+.worldBackground{
+width: 100%;
+height: 70vh;
+    background-image: url('../public/world.png');
+    background-repeat: repeat-x;
+    background-position: left center;
+    background-attachment: fixed;
+    animation: backgroundMove 20s linear infinite;
+}
+
+@keyframes backgroundMove {
+    0% {
+        background-position: left center;
+    }
+    100% {
+        background-position: right center;
+    }
+}
+
+
