@@ -12,20 +12,21 @@ const LeafletMap = (): ReactElement => {
   const [searchedLocation, setSearchedLocation] = useState<LatLngLiteral | null>(null);
   const [mapKey, setMapKey] = useState(0);
 
-  const fetchLocation = async () => {
-    try {
-      const response = await fetch(
-        `https://nominatim.openstreetmap.org/search?q=${searchValue}&format=json&limit=1`
-      );
-      const data = await response.json();
-      if (data.length > 0) {
-        const { lat, lon } = data[0];
-        setSearchedLocation({ lat: parseFloat(lat), lng: parseFloat(lon) });
-        setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
-      }
-    } catch (error) {
-      console.error("Error occurred while searching:", error);
-    }
+  const fetchLocation = () => {
+    fetch(
+      `https://nominatim.openstreetmap.org/search?q=${searchValue}&format=json&limit=1`
+    )
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length > 0) {
+          const { lat, lon } = data[0];
+          setSearchedLocation({ lat: parseFloat(lat), lng: parseFloat(lon) });
+          setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
+        }
+      })
+      .catch((error) => {
+        console.error("Error occurred while searching:", error);
+      });
   };
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
