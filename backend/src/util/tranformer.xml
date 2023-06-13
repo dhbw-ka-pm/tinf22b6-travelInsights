@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xsl:stylesheet version="1.0" xmlns:xsl="http://www.w3.org/1999/XSL/Transform">
+    <xsl:output encoding="UTF-8" />
+    <xsl:template match="Workbook">
+        <countries>
+            <xsl:for-each select="Worksheet">
+                <country name="{@Name}">
+                    <xsl:for-each select="Table/Row">
+                        <xsl:if test="@Index!=1">
+                            <xsl:for-each select="Cell">
+                                <xsl:if test="@Index=7">
+                                    <city name="{Data}" />
+                                    <xsl:value-of select="Cell"/>
+                                </xsl:if>
+                            </xsl:for-each>
+                        </xsl:if>
+                    </xsl:for-each>
+                </country>
+            </xsl:for-each>
+        </countries>
+    </xsl:template>
+</xsl:stylesheet>
