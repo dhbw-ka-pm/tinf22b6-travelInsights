@@ -1,11 +1,74 @@
 import * as React from 'react';
-import { type LatLngBoundsLiteral } from 'leaflet';
-import { MapContainer, SVGOverlay, TileLayer } from 'react-leaflet';
-import { Grid } from '@mui/material';
+import { type LatLngLiteral, type LatLngBoundsLiteral } from 'leaflet';
+import {
+  MapContainer,
+  SVGOverlay,
+  TileLayer,
+  useMapEvents
+} from 'react-leaflet';
+import { Grid, InputAdornment, TextField } from '@mui/material';
 import MediaCard from '../components/MediaCard';
+import { Search } from '@mui/icons-material';
+import { useState } from 'react';
 
 const LeafletMap = (): React.ReactElement => {
-  const position = { lat: 51.505, lng: -0.09 };
+  const [searchValue, setSearchValue] = useState('');
+  const [searchedLocation, setSearchedLocation] = useState<
+    LatLngLiteral | undefined
+  >(undefined);
+  const [mapKey, setMapKey] = useState(0);
+
+  const fetchLocation = (): void => {
+    fetch(
+      `https://nominatim.openstreetmap.org/search?q=${searchValue}&format=json&limit=1`
+    )
+      // eslint-disable-next-line @typescript-eslint/promise-function-async
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.length > 0) {
+          const { lat, lon } = data[0];
+          setSearchedLocation({ lat: parseFloat(lat), lng: parseFloat(lon) });
+          setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
+        }
+      })
+      .catch((error) => {
+        console.error('Error occurred while searching:', error);
+      });
+  };
+
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ): void => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (searchValue !== '') {
+        fetchLocation();
+      }
+    }
+  };
+
+  const handleSearch = (): void => {
+    if (searchValue !== '') {
+      fetchLocation();
+    }
+  };
+
+  const MapEvents = (): any => {
+    useMapEvents({
+      click: (event) => {
+        const { lat, lng } = event.latlng;
+        setSearchedLocation({ lat, lng });
+        setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
+      }
+    });
+
+    return null;
+  };
+
+  const position: LatLngLiteral = searchedLocation ?? {
+    lat: 51.505,
+    lng: -0.09
+  };
   const bounds: LatLngBoundsLiteral = [
     [51.49, -0.08],
     [51.5, -0.06]
@@ -15,7 +78,13 @@ const LeafletMap = (): React.ReactElement => {
     <>
       <Grid container>
         <Grid item xs={9}>
-          <MapContainer center={position} zoom={5} scrollWheelZoom={true}>
+          <MapContainer
+            key={mapKey}
+            center={position}
+            zoom={5}
+            scrollWheelZoom={true}
+          >
+            <MapEvents />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -35,6 +104,23 @@ const LeafletMap = (): React.ReactElement => {
             style={{ maxHeight: '100vh', overflow: 'auto' }}
             rowGap={1}
           >
+            <Grid>
+              <TextField
+                fullWidth
+                value={searchValue}
+                onChange={(e) => {
+                  setSearchValue(e.target.value);
+                }}
+                onKeyDown={handleKeyDown}
+                InputProps={{
+                  endAdornment: (
+                    <InputAdornment position="end">
+                      <Search onClick={handleSearch} />
+                    </InputAdornment>
+                  )
+                }}
+              />
+            </Grid>
             <Grid>
               <MediaCard />
             </Grid>
