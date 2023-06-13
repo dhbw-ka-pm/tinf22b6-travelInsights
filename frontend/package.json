@@ -16,6 +16,7 @@
     "@types/node": "^16.18.30",
     "@types/react": "^18.2.6",
     "@types/react-dom": "^18.2.4",
+    "eslint-plugin-prettier": "^4.2.1",
     "leaflet": "^1.9.4",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -25,12 +26,17 @@
     "typescript": "^4.9.5",
     "web-vitals": "^2.1.4"
   },
+  "lint-staged": {
+    "*.{ts,tsx,js,jsx}": "eslint",
+    "*.{ts,tsx,js,jsx,json,yaml,md}": "prettier --check"
+  },
   "scripts": {
     "start": "react-scripts start",
     "gen": "restful-react import --config restful-react.config.js",
     "build": "react-scripts build",
     "test": "react-scripts test",
-    "eject": "react-scripts eject"
+    "eject": "react-scripts eject",
+    "lint": "eslint --ext .tsx,.ts ./src/**/**"
   },
   "eslintConfig": {
     "extends": [
@@ -51,6 +57,19 @@
     ]
   },
   "devDependencies": {
-    "@types/leaflet": "^1.9.3"
+    "lint-staged": "^10.5.3",
+    "@types/leaflet": "^1.9.3",
+    "@typescript-eslint/eslint-plugin": "^5.50.0",
+    "@typescript-eslint/parser": "^5.59.9",
+    "eslint": "^8.0.1",
+    "eslint-config-prettier": "^8.8.0",
+    "eslint-config-standard-with-typescript": "^35.0.0",
+    "eslint-plugin-import": "^2.25.2",
+    "eslint-plugin-n": "^15.0.0",
+    "eslint-plugin-prettier": "^4.2.1",
+    "eslint-plugin-promise": "^6.0.0",
+    "eslint-plugin-react": "^7.32.2",
+    "prettier": "^2.8.8",
+    "typescript": "*"
   }
 }

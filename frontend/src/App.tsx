@@ -1,42 +1,50 @@
+import * as React from 'react';
 import { createContext, useEffect, useState } from 'react';
 import './App.css';
 import Impressum from './page/Impressum';
 import LeafletMap from './page/LeafletMap';
 import Welcome from './page/Welcome';
-
-import '@fontsource/roboto/300.css';
-import '@fontsource/roboto/400.css';
-import '@fontsource/roboto/500.css';
-import '@fontsource/roboto/700.css';
+import ResponsiveAppBar from './components/AppBar';
+import Destinations from './page/Destinations';
 
 export enum PageState {
   WELCOME,
+  DESTINATIONS,
   MAP,
   IMPRESSUM
 }
 
-export const PageStateContext = createContext<{state: PageState, setState: Function}>({state: PageState.MAP, setState: () => {}});
+export const PageStateContext = createContext<{
+  state: PageState;
+  setState: (state: PageState) => void;
+}>({ state: PageState.MAP, setState: () => {} });
 
-function App() {
+function App(): React.ReactElement {
   const [stateProvider, setCurrentState] = useState<PageState>(PageState.MAP);
-  const [content, setContent] = useState<JSX.Element>(<></>)
+  const [content, setContent] = useState<JSX.Element>(<></>);
 
   useEffect(() => {
     switch (stateProvider) {
       case PageState.WELCOME:
-        setContent(<Welcome />)
+        setContent(<Welcome />);
         break;
       case PageState.MAP:
-        setContent(<LeafletMap />)
+        setContent(<LeafletMap />);
+        break;
+      case PageState.DESTINATIONS:
+        setContent(<Destinations />);
         break;
       case PageState.IMPRESSUM:
-        setContent(<Impressum />)
+        setContent(<Impressum />);
         break;
     }
   }, [stateProvider]);
 
   return (
-    <PageStateContext.Provider value={{ state: stateProvider, setState: setCurrentState }}>
+    <PageStateContext.Provider
+      value={{ state: stateProvider, setState: setCurrentState }}
+    >
+      {stateProvider !== PageState.WELCOME && <ResponsiveAppBar />}
       {content}
     </PageStateContext.Provider>
   );
