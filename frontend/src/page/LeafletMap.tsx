@@ -9,7 +9,9 @@ import {
 import { Grid, InputAdornment, TextField } from '@mui/material';
 import MediaCard from '../components/MediaCard';
 import { Search } from '@mui/icons-material';
-import { useState } from 'react';
+import { createContext, useContext, useEffect, useState } from 'react';
+
+export const SearchContext = createContext<{searchTermOnMapStart: string}>({searchTermOnMapStart: ''});
 
 const LeafletMap = (): React.ReactElement => {
   const [searchValue, setSearchValue] = useState('');
@@ -17,8 +19,9 @@ const LeafletMap = (): React.ReactElement => {
     LatLngLiteral | undefined
   >(undefined);
   const [mapKey, setMapKey] = useState(0);
+  const searchContext = useContext(SearchContext);
 
-  const fetchLocation = (): void => {
+  const fetchLocation = (searchValue: string): void => {
     fetch(
       `https://nominatim.openstreetmap.org/search?q=${searchValue}&format=json&limit=1`
     )
@@ -42,14 +45,14 @@ const LeafletMap = (): React.ReactElement => {
     if (event.key === 'Enter') {
       event.preventDefault();
       if (searchValue !== '') {
-        fetchLocation();
+        fetchLocation(searchValue);
       }
     }
   };
 
-  const handleSearch = (): void => {
+  const handleSearch = (searchValue: string): void => {
     if (searchValue !== '') {
-      fetchLocation();
+      fetchLocation(searchValue);
     }
   };
 
@@ -73,6 +76,12 @@ const LeafletMap = (): React.ReactElement => {
     [51.49, -0.08],
     [51.5, -0.06]
   ];
+
+  useEffect(() => {
+    const startSearchTerm = searchContext.searchTermOnMapStart;
+    searchContext.searchTermOnMapStart = '';
+    handleSearch(startSearchTerm);
+  });
 
   return (
     <>
@@ -115,7 +124,7 @@ const LeafletMap = (): React.ReactElement => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <Search onClick={handleSearch} />
+                      <Search onClick={() => {handleSearch(searchValue)}} />
                     </InputAdornment>
                   )
                 }}
