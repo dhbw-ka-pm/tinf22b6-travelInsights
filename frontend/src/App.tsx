@@ -17,7 +17,10 @@ export enum PageState {
 export const PageStateContext = createContext<{
   state: PageState;
   setState: (state: PageState) => void;
-}>({ state: PageState.MAP, setState: () => {} });
+}>({
+  state: PageState.MAP, setState: () => {
+  }
+});
 
 function App(): React.ReactElement {
   const [stateProvider, setCurrentState] = useState<PageState>(PageState.MAP);
@@ -45,8 +48,11 @@ function App(): React.ReactElement {
       value={{ state: stateProvider, setState: setCurrentState }}
     >
       {stateProvider !== PageState.WELCOME && <ResponsiveAppBar />}
-      {content}
+      <div className={'content-pane'}>
+        {content}
+      </div>
     </PageStateContext.Provider>
   );
 }
+
 export default App;

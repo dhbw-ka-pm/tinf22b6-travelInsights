@@ -13,9 +13,9 @@ import { type City, useGetTravelDestinationForCountry } from '../api.generated';
 import MediaCard from '../components/MediaCard';
 
 const LeafletMap = (): React.ReactElement => {
+  const [queryValue, setQueryValue] = useState<string>('');
+  const { loading, data } = useGetTravelDestinationForCountry({ country: queryValue });
   const [searchValue, setSearchValue] = useState('');
-  const { loading, data, refetch } = useGetTravelDestinationForCountry({country: searchValue});
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [pinData, setPinData] = useState<City[]>();
   const [searchedLocation, setSearchedLocation] = useState<
     LatLngLiteral | undefined
@@ -23,11 +23,13 @@ const LeafletMap = (): React.ReactElement => {
   const [mapKey, setMapKey] = useState(0);
 
   useEffect(() => {
-    if (!loading && data !== null) {
-      setPinData(data);
-      console.log(data)
+    if (!loading) {
+      if (data != null) {
+        setPinData(data);
+        fetchLocation();
+      }
     }
-  }, [data])
+  }, [queryValue, data]);
 
   const fetchLocation = (): void => {
     fetch(
@@ -47,20 +49,9 @@ const LeafletMap = (): React.ReactElement => {
       });
   };
 
-  const handleKeyDown = (
-    event: React.KeyboardEvent<HTMLInputElement>
-  ): void => {
-    if (event.key === 'Enter') {
-      event.preventDefault();
-      if (searchValue !== '') {
-        fetchLocation();
-      }
-    }
-  };
-
   const handleSearch = (): void => {
     if (searchValue !== '') {
-      refetch().then(() => {fetchLocation()}).catch(() => {});
+      setQueryValue(searchValue);
     }
   };
 
@@ -98,12 +89,12 @@ const LeafletMap = (): React.ReactElement => {
             <MapEvents />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
             <SVGOverlay attributes={{ stroke: 'red' }} bounds={bounds}>
-              <rect x="0" y="0" width="100%" height="100%" fill="blue" />
-              <circle r="5" cx="10" cy="10" fill="red" />
-              <text x="50%" y="50%" stroke="white">
+              <rect x='0' y='0' width='100%' height='100%' fill='blue' />
+              <circle r='5' cx='10' cy='10' fill='red' />
+              <text x='50%' y='50%' stroke='white'>
                 text
               </text>
             </SVGOverlay>
@@ -112,7 +103,7 @@ const LeafletMap = (): React.ReactElement => {
         <Grid item xs={3}>
           <Grid
             container
-            style={{ maxHeight: '100vh', overflow: 'auto' }}
+            style={{ maxHeight: '92vh', overflow: 'auto' }}
             rowGap={1}
           >
             <Grid>
@@ -122,10 +113,9 @@ const LeafletMap = (): React.ReactElement => {
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                 }}
-                onKeyDown={handleKeyDown}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">
+                    <InputAdornment position='end'>
                       <IconButton onClick={handleSearch}>
                         <Search />
                       </IconButton>
@@ -134,7 +124,9 @@ const LeafletMap = (): React.ReactElement => {
                 }}
               />
             </Grid>
-            {pinData?.map((city) => {return <MediaCard name={city.name}></MediaCard>})}
+            {pinData?.map((city) => {
+              return <MediaCard key={city.name} name={city.name}></MediaCard>;
+            })}
           </Grid>
         </Grid>
       </Grid>
