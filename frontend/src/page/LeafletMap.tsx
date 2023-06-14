@@ -6,17 +6,28 @@ import {
   TileLayer,
   useMapEvents
 } from 'react-leaflet';
-import { Grid, InputAdornment, TextField } from '@mui/material';
-import MediaCard from '../components/MediaCard';
+import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Search } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { type City, useGetTravelDestinationForCountry } from '../api.generated';
+import MediaCard from '../components/MediaCard';
 
 const LeafletMap = (): React.ReactElement => {
   const [searchValue, setSearchValue] = useState('');
+  const { loading, data, refetch } = useGetTravelDestinationForCountry({country: searchValue});
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const [pinData, setPinData] = useState<City[]>();
   const [searchedLocation, setSearchedLocation] = useState<
     LatLngLiteral | undefined
   >(undefined);
   const [mapKey, setMapKey] = useState(0);
+
+  useEffect(() => {
+    if (!loading && data !== null) {
+      setPinData(data);
+      console.log(data)
+    }
+  }, [data])
 
   const fetchLocation = (): void => {
     fetch(
@@ -49,7 +60,7 @@ const LeafletMap = (): React.ReactElement => {
 
   const handleSearch = (): void => {
     if (searchValue !== '') {
-      fetchLocation();
+      refetch().then(() => {fetchLocation()}).catch(() => {});
     }
   };
 
@@ -115,30 +126,15 @@ const LeafletMap = (): React.ReactElement => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position="end">
-                      <Search onClick={handleSearch} />
+                      <IconButton onClick={handleSearch}>
+                        <Search />
+                      </IconButton>
                     </InputAdornment>
                   )
                 }}
               />
             </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
+            {pinData?.map((city) => {return <MediaCard name={city.name}></MediaCard>})}
           </Grid>
         </Grid>
       </Grid>

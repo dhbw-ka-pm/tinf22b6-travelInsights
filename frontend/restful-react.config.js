@@ -8,7 +8,7 @@ module.exports = {
 		file: '../backend/src/openapi.generated.json',
 		output: 'src/api.generated.tsx',
 		customProps: {
-			base: '"/api"',
+			base: '"http://localhost:4567/api"',
 		},
 	},
 };
