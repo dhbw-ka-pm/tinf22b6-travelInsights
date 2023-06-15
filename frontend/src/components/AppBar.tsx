@@ -13,63 +13,55 @@ function ResponsiveAppBar(): React.ReactElement {
     <AppBar position="static">
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <Button>
+          <Button component={Link} to={'/'}>
             <FlightTakeoffIcon
               sx={{ color: 'white', display: 'flex', mr: 1 }}
             />
-            <Link to={'/'}>
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                sx={{
-                  mr: 2,
-                  display: { xs: 'none', md: 'flex' },
-                  fontFamily: 'monospace',
-                  fontWeight: 700,
-                  letterSpacing: '.2rem',
-                  color: 'white',
-                  textDecoration: 'none'
-                }}
-              >
-                Travel Insights
-              </Typography>
-            </Link>
-            <Link to={'/'}>
-              <Typography
-                variant="h6"
-                noWrap
-                component="a"
-                href="/"
-                sx={{
-                  mr: 2,
-                  display: { xs: 'flex', md: 'none' },
-                  fontFamily: 'monospace',
-                  fontWeight: 700,
-                  letterSpacing: '.2rem',
-                  color: 'white',
-                  textDecoration: 'none'
-                }}
-              >
-                TI
-              </Typography>
-            </Link>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              sx={{
+                mr: 2,
+                display: { xs: 'none', md: 'flex' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.2rem',
+                color: 'white',
+                textDecoration: 'none'
+              }}
+            >
+              Travel Insights
+            </Typography>
+            <Typography
+              variant="h6"
+              noWrap
+              component="a"
+              href="/"
+              sx={{
+                mr: 2,
+                display: { xs: 'flex', md: 'none' },
+                fontFamily: 'monospace',
+                fontWeight: 700,
+                letterSpacing: '.2rem',
+                color: 'white',
+                textDecoration: 'none'
+              }}
+            >
+              TI
+            </Typography>
           </Button>
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
-            <Link to={'/destinations'}>
-              <Button
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                Reiseziele
-              </Button>
-            </Link>
-            <Link to={'/impressum'}>
-              <Button
-                sx={{ my: 2, color: 'white', display: 'block' }}
-              >
-                Impressum
-              </Button>
-            </Link>
+            <Button component={Link} to={'/destinations'}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Reiseziele
+            </Button>
+            <Button component={Link} to={'/impressum'}
+              sx={{ my: 2, color: 'white', display: 'block' }}
+            >
+              Impressum
+            </Button>
           </Box>
         </Toolbar>
       </Container>

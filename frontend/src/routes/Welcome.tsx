@@ -1,22 +1,16 @@
-import React, {type ReactElement, useContext, useState} from "react";
+import React, {type ReactElement, useState} from "react";
 import {Button} from "@mui/material";
-import {SearchContext} from "./LeafletMap";
+import { Link } from "react-router-dom";
 
 const Welcome = (): ReactElement => {
     const [searchTerm, setSearchTerm] = useState("");
-    const searchContext = useContext(SearchContext);
 
     const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) : void => {
         setSearchTerm(event.target.value);
     };
 
     const handleSearch = () : void => {
-        // Hier kannst du die Logik für die Suchfunktion implementieren
-        // Verwende die Variable searchTerm für die Suchabfrage
         console.log("Search term:", searchTerm);
-        // Führe hier den entsprechenden Code aus, um die Suche durchzuführen
-
-        searchContext.searchTermOnMapStart = searchTerm;
     };
 
     return (
@@ -39,7 +33,7 @@ const Welcome = (): ReactElement => {
             
             {/* Footer */}
             <footer className="footerLandingPage">
-                <Button onClick={() => { }}>to Map</Button>
+                <Button component={Link} to={'map/browse'}>Browse Map</Button>
             </footer>
         </>
     );
