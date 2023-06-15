@@ -1,17 +1,10 @@
 import React, {type ReactElement, useState} from "react";
-import {Button} from "@mui/material";
+import {Button, IconButton, InputAdornment, Paper, TextField} from "@mui/material";
 import { Link } from "react-router-dom";
+import { Search } from "@mui/icons-material";
 
 const Welcome = (): ReactElement => {
     const [searchTerm, setSearchTerm] = useState("");
-
-    const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) : void => {
-        setSearchTerm(event.target.value);
-    };
-
-    const handleSearch = () : void => {
-        console.log("Search term:", searchTerm);
-    };
 
     return (
         <>
@@ -21,10 +14,22 @@ const Welcome = (): ReactElement => {
             </div>
             <div className="blurFilter">
                 <div className="searchBar">
-
-                    <input type="text" value={searchTerm} onChange={handleInputChange}
-                           placeholder="Wohin geht es als nächstes?"/>
-                    <Button onClick={handleSearch}>Search</Button>
+                    <Paper>
+                        <TextField 
+                            sx={{width:'40vw'}}
+                            value={searchTerm} 
+                            onChange={(event) => {setSearchTerm(event.target.value)}}
+                            placeholder="Wohin geht es als nächstes?"
+                            InputProps={{
+                                endAdornment: (
+                                <InputAdornment position='end'>
+                                    <IconButton component={Link} to={'/map/' + searchTerm}>
+                                    <Search />
+                                    </IconButton>
+                                </InputAdornment>
+                                )
+                            }}/>
+                    </Paper>
                 </div>
             </div>
 
