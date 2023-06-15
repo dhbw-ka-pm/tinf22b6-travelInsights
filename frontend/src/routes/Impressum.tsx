@@ -1,9 +1,11 @@
 import { Paper } from '@mui/material';
 import * as React from 'react';
+import ResponsiveAppBar from '../components/AppBar';
 
 const Impressum = (): React.ReactElement => {
   return (
     <>
+    <ResponsiveAppBar />
       <Paper elevation={3} sx={{ margin: '20px', paddingLeft: '5px' }}>
         <h1>Impressum</h1>
         <br />
