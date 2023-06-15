@@ -44,7 +44,7 @@ const Welcome = (): ReactElement => {
             
             {/* Footer */}
             <footer className="footerLandingPage">
-                <Button onClick={() => {setState(PageState.MAP)}}>to Map</Button>
+                <Button onClick={() => { setState(PageState.MAP); }}>to Map</Button>
             </footer>
         </>
     );

@@ -6,20 +6,33 @@ import {
   TileLayer,
   useMapEvents
 } from 'react-leaflet';
-import { Grid, InputAdornment, TextField } from '@mui/material';
-import MediaCard from '../components/MediaCard';
+import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Search } from '@mui/icons-material';
+import { type City, useGetTravelDestinationForCountry } from '../api.generated';
+import MediaCard from '../components/MediaCard';
 import { createContext, useContext, useEffect, useState } from 'react';
 
 export const SearchContext = createContext<{searchTermOnMapStart: string}>({searchTermOnMapStart: ''});
 
 const LeafletMap = (): React.ReactElement => {
+  const [queryValue, setQueryValue] = useState<string>('');
+  const { loading, data } = useGetTravelDestinationForCountry({ country: queryValue });
   const [searchValue, setSearchValue] = useState('');
+  const [pinData, setPinData] = useState<City[]>();
   const [searchedLocation, setSearchedLocation] = useState<
     LatLngLiteral | undefined
   >(undefined);
   const [mapKey, setMapKey] = useState(0);
   const searchContext = useContext(SearchContext);
+
+  useEffect(() => {
+    if (!loading) {
+      if (data != null) {
+        setPinData(data);
+        fetchLocation(searchValue);
+      }
+    }
+  }, [queryValue, data]);
 
   const fetchLocation = (searchValue: string): void => {
     fetch(
@@ -39,20 +52,19 @@ const LeafletMap = (): React.ReactElement => {
       });
   };
 
+
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): void => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if (searchValue !== '') {
-        fetchLocation(searchValue);
-      }
+      handleSearch(searchValue);
     }
   };
 
   const handleSearch = (searchValue: string): void => {
     if (searchValue !== '') {
-      fetchLocation(searchValue);
+      setQueryValue(searchValue);
     }
   };
 
@@ -96,12 +108,12 @@ const LeafletMap = (): React.ReactElement => {
             <MapEvents />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
             <SVGOverlay attributes={{ stroke: 'red' }} bounds={bounds}>
-              <rect x="0" y="0" width="100%" height="100%" fill="blue" />
-              <circle r="5" cx="10" cy="10" fill="red" />
-              <text x="50%" y="50%" stroke="white">
+              <rect x='0' y='0' width='100%' height='100%' fill='blue' />
+              <circle r='5' cx='10' cy='10' fill='red' />
+              <text x='50%' y='50%' stroke='white'>
                 text
               </text>
             </SVGOverlay>
@@ -110,44 +122,31 @@ const LeafletMap = (): React.ReactElement => {
         <Grid item xs={3}>
           <Grid
             container
-            style={{ maxHeight: '100vh', overflow: 'auto' }}
+            style={{ maxHeight: '92vh', overflow: 'auto' }}
             rowGap={1}
           >
             <Grid>
               <TextField
                 fullWidth
                 value={searchValue}
+                onKeyDown={handleKeyDown}
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                 }}
-                onKeyDown={handleKeyDown}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">
-                      <Search onClick={() => {handleSearch(searchValue)}} />
+                    <InputAdornment position='end'>
+                      <IconButton onClick={() => {handleSearch(searchValue)}}>
+                        <Search />
+                      </IconButton>
                     </InputAdornment>
                   )
                 }}
               />
             </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
-            <Grid>
-              <MediaCard />
-            </Grid>
+            {pinData?.map((city) => {
+              return <MediaCard key={city.name} name={city.name}></MediaCard>;
+            })}
           </Grid>
         </Grid>
       </Grid>
