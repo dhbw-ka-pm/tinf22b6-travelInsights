@@ -11,6 +11,7 @@ import { Search } from '@mui/icons-material';
 import { type City, useGetTravelDestinationForCountry } from '../api.generated';
 import MediaCard from '../components/MediaCard';
 import { createContext, useContext, useEffect, useState } from 'react';
+import ResponsiveAppBar from '../components/AppBar';
 
 export const SearchContext = createContext<{searchTermOnMapStart: string}>({searchTermOnMapStart: ''});
 
@@ -97,6 +98,7 @@ const LeafletMap = (): React.ReactElement => {
 
   return (
     <>
+    <ResponsiveAppBar />
       <Grid container>
         <Grid item xs={9}>
           <MapContainer

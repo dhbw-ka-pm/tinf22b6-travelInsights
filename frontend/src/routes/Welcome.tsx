@@ -1,10 +1,8 @@
 import React, {type ReactElement, useContext, useState} from "react";
-import {PageState, PageStateContext} from "../App";
 import {Button} from "@mui/material";
 import {SearchContext} from "./LeafletMap";
 
 const Welcome = (): ReactElement => {
-    const {setState} = useContext(PageStateContext);
     const [searchTerm, setSearchTerm] = useState("");
     const searchContext = useContext(SearchContext);
 
@@ -19,13 +17,10 @@ const Welcome = (): ReactElement => {
         // Führe hier den entsprechenden Code aus, um die Suche durchzuführen
 
         searchContext.searchTermOnMapStart = searchTerm;
-        setState(PageState.MAP);
     };
 
     return (
-
         <>
-
             {/* Header */}
             <div className="headerLandingPage">
                 <img id="logo" src="logoTravelInsights.png"/>
@@ -44,7 +39,7 @@ const Welcome = (): ReactElement => {
             
             {/* Footer */}
             <footer className="footerLandingPage">
-                <Button onClick={() => { setState(PageState.MAP); }}>to Map</Button>
+                <Button onClick={() => { }}>to Map</Button>
             </footer>
         </>
     );
