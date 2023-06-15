@@ -8,9 +8,11 @@ import {
 } from 'react-leaflet';
 import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Search } from '@mui/icons-material';
-import { useEffect, useState } from 'react';
 import { type City, useGetTravelDestinationForCountry } from '../api.generated';
 import MediaCard from '../components/MediaCard';
+import { createContext, useContext, useEffect, useState } from 'react';
+
+export const SearchContext = createContext<{searchTermOnMapStart: string}>({searchTermOnMapStart: ''});
 
 const LeafletMap = (): React.ReactElement => {
   const [queryValue, setQueryValue] = useState<string>('');
@@ -21,6 +23,7 @@ const LeafletMap = (): React.ReactElement => {
     LatLngLiteral | undefined
   >(undefined);
   const [mapKey, setMapKey] = useState(0);
+  const searchContext = useContext(SearchContext);
 
   useEffect(() => {
     if (!loading) {
@@ -31,7 +34,7 @@ const LeafletMap = (): React.ReactElement => {
     }
   }, [queryValue, data]);
 
-  const fetchLocation = (): void => {
+  const fetchLocation = (searchValue: string): void => {
     fetch(
       `https://nominatim.openstreetmap.org/search?q=${searchValue}&format=json&limit=1`
     )
@@ -49,9 +52,21 @@ const LeafletMap = (): React.ReactElement => {
       });
   };
 
-  const handleSearch = (): void => {
+
+  const handleKeyDown = (
+    event: React.KeyboardEvent<HTMLInputElement>
+  ): void => {
+    if (event.key === 'Enter') {
+      event.preventDefault();
+      if (searchValue !== '') {
+        fetchLocation(searchValue);
+      }
+    }
+  };
+
+  const handleSearch = (searchValue: string): void => {
     if (searchValue !== '') {
-      setQueryValue(searchValue);
+      fetchLocation(searchValue);
     }
   };
 
@@ -75,6 +90,12 @@ const LeafletMap = (): React.ReactElement => {
     [51.49, -0.08],
     [51.5, -0.06]
   ];
+
+  useEffect(() => {
+    const startSearchTerm = searchContext.searchTermOnMapStart;
+    searchContext.searchTermOnMapStart = '';
+    handleSearch(startSearchTerm);
+  });
 
   return (
     <>
@@ -116,7 +137,7 @@ const LeafletMap = (): React.ReactElement => {
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
-                      <IconButton onClick={handleSearch}>
+                      <IconButton onClick={handleSearch(searchValue)}>
                         <Search />
                       </IconButton>
                     </InputAdornment>

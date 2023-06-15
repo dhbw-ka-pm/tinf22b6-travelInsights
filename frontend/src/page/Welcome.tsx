@@ -1,20 +1,25 @@
 import React, {type ReactElement, useContext, useState} from "react";
 import {PageState, PageStateContext} from "../App";
 import {Button} from "@mui/material";
+import {SearchContext} from "./LeafletMap";
 
 const Welcome = (): ReactElement => {
     const {setState} = useContext(PageStateContext);
     const [searchTerm, setSearchTerm] = useState("");
+    const searchContext = useContext(SearchContext);
 
-    const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }): any => {
+    const handleInputChange = (event: { target: { value: React.SetStateAction<string>; }; }) : void => {
         setSearchTerm(event.target.value);
     };
 
-    const handleSearch = (): void => {
+    const handleSearch = () : void => {
         // Hier kannst du die Logik für die Suchfunktion implementieren
         // Verwende die Variable searchTerm für die Suchabfrage
         console.log("Search term:", searchTerm);
         // Führe hier den entsprechenden Code aus, um die Suche durchzuführen
+
+        searchContext.searchTermOnMapStart = searchTerm;
+        setState(PageState.MAP);
     };
 
     return (
