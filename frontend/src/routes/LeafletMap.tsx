@@ -1,39 +1,40 @@
 import * as React from 'react';
-import { type LatLngLiteral, type LatLngBoundsLiteral } from 'leaflet';
+import { type LatLngLiteral } from 'leaflet';
 import {
   MapContainer,
-  SVGOverlay,
   TileLayer,
   useMapEvents
 } from 'react-leaflet';
-import { Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+import { CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { type City, useGetTravelDestinationForCountry } from '../api.generated';
 import MediaCard from '../components/MediaCard';
-import { createContext, useContext, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ResponsiveAppBar from '../components/AppBar';
-
-export const SearchContext = createContext<{searchTermOnMapStart: string}>({searchTermOnMapStart: ''});
+import { Link, useLoaderData, useSubmit } from "react-router-dom";
 
 const LeafletMap = (): React.ReactElement => {
-  const [queryValue, setQueryValue] = useState<string>('');
-  const { loading, data } = useGetTravelDestinationForCountry({ country: queryValue });
-  const [searchValue, setSearchValue] = useState('');
+  const urlParam = useLoaderData() as string;
+  const submit = useSubmit();
+  const { loading, data } = useGetTravelDestinationForCountry({ country: urlParam === "browse" ? "Worldwide" : urlParam });
+
+  const [searchValue, setSearchValue] = useState(urlParam === "browse" ? "Worldwide" : urlParam);
+
   const [pinData, setPinData] = useState<City[]>();
   const [searchedLocation, setSearchedLocation] = useState<
     LatLngLiteral | undefined
   >(undefined);
   const [mapKey, setMapKey] = useState(0);
-  const searchContext = useContext(SearchContext);
+
 
   useEffect(() => {
     if (!loading) {
       if (data != null) {
         setPinData(data);
-        fetchLocation(searchValue);
+        fetchLocation(urlParam);
       }
     }
-  }, [queryValue, data]);
+  }, [urlParam, data]);
 
   const fetchLocation = (searchValue: string): void => {
     fetch(
@@ -53,19 +54,12 @@ const LeafletMap = (): React.ReactElement => {
       });
   };
 
-
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
   ): void => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      handleSearch(searchValue);
-    }
-  };
-
-  const handleSearch = (searchValue: string): void => {
-    if (searchValue !== '') {
-      setQueryValue(searchValue);
+      submit(null, { method: "get", action: "/map/" + searchValue })
     }
   };
 
@@ -85,16 +79,6 @@ const LeafletMap = (): React.ReactElement => {
     lat: 51.505,
     lng: -0.09
   };
-  const bounds: LatLngBoundsLiteral = [
-    [51.49, -0.08],
-    [51.5, -0.06]
-  ];
-
-  useEffect(() => {
-    const startSearchTerm = searchContext.searchTermOnMapStart;
-    searchContext.searchTermOnMapStart = '';
-    handleSearch(startSearchTerm);
-  });
 
   return (
     <>
@@ -112,13 +96,6 @@ const LeafletMap = (): React.ReactElement => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
-            <SVGOverlay attributes={{ stroke: 'red' }} bounds={bounds}>
-              <rect x='0' y='0' width='100%' height='100%' fill='blue' />
-              <circle r='5' cx='10' cy='10' fill='red' />
-              <text x='50%' y='50%' stroke='white'>
-                text
-              </text>
-            </SVGOverlay>
           </MapContainer>
         </Grid>
         <Grid item xs={3}>
@@ -131,14 +108,12 @@ const LeafletMap = (): React.ReactElement => {
               <TextField
                 fullWidth
                 value={searchValue}
-                onKeyDown={handleKeyDown}
-                onChange={(e) => {
-                  setSearchValue(e.target.value);
-                }}
+                onKeyDown={(handleKeyDown)}
+                onChange={(event) => {setSearchValue(event.target.value)}}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
-                      <IconButton onClick={() => {handleSearch(searchValue)}}>
+                      <IconButton component={Link} to={'/map/' + searchValue}>
                         <Search />
                       </IconButton>
                     </InputAdornment>
@@ -146,7 +121,7 @@ const LeafletMap = (): React.ReactElement => {
                 }}
               />
             </Grid>
-            {pinData?.map((city) => {
+            {loading ? <CircularProgress /> : pinData?.map((city) => {
               return <MediaCard key={city.name} name={city.name}></MediaCard>;
             })}
           </Grid>

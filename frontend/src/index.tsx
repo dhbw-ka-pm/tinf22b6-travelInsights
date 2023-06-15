@@ -24,7 +24,14 @@ const router = createBrowserRouter([
   },
   {
     path: "map/:searchValue",
-    element: <LeafletMap />
+    element: <LeafletMap />,
+    loader: async ({params}) => {
+      if (params.searchValue !== null) {
+        return params.searchValue;
+      } else {
+        return "Worldwide"
+      }
+    },
   },
   {
     path: "impressum",
