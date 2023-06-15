@@ -29,7 +29,7 @@ const LeafletMap = (): React.ReactElement => {
     if (!loading) {
       if (data != null) {
         setPinData(data);
-        fetchLocation();
+        fetchLocation(searchValue);
       }
     }
   }, [queryValue, data]);
@@ -58,15 +58,13 @@ const LeafletMap = (): React.ReactElement => {
   ): void => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      if (searchValue !== '') {
-        fetchLocation(searchValue);
-      }
+      handleSearch(searchValue);
     }
   };
 
   const handleSearch = (searchValue: string): void => {
     if (searchValue !== '') {
-      fetchLocation(searchValue);
+      setQueryValue(searchValue);
     }
   };
 
@@ -131,13 +129,14 @@ const LeafletMap = (): React.ReactElement => {
               <TextField
                 fullWidth
                 value={searchValue}
+                onKeyDown={handleKeyDown}
                 onChange={(e) => {
                   setSearchValue(e.target.value);
                 }}
                 InputProps={{
                   endAdornment: (
                     <InputAdornment position='end'>
-                      <IconButton onClick={handleSearch(searchValue)}>
+                      <IconButton onClick={() => {handleSearch(searchValue)}}>
                         <Search />
                       </IconButton>
                     </InputAdornment>
