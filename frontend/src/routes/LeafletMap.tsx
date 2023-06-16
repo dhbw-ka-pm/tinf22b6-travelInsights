@@ -84,7 +84,7 @@ const LeafletMap = (): React.ReactElement => {
     <>
     <ResponsiveAppBar />
       <Grid container>
-        <Grid item xs={9}>
+        <Grid item xs={10}>
           <MapContainer
             key={mapKey}
             center={position}
@@ -98,7 +98,7 @@ const LeafletMap = (): React.ReactElement => {
             />
           </MapContainer>
         </Grid>
-        <Grid item xs={3}>
+        <Grid item xs={2}>
           <Grid
             container
             style={{ maxHeight: '92vh', overflow: 'auto' }}
@@ -121,9 +121,11 @@ const LeafletMap = (): React.ReactElement => {
                 }}
               />
             </Grid>
-            {loading ? <CircularProgress /> : pinData?.map((city) => {
-              return <MediaCard key={city.name} name={city.name}></MediaCard>;
-            })}
+            <Grid>
+              {loading ? <CircularProgress /> : pinData?.map((city) => {
+                return <MediaCard key={city.name} name={city.name}></MediaCard>;
+              })}
+            </Grid>
           </Grid>
         </Grid>
       </Grid>
