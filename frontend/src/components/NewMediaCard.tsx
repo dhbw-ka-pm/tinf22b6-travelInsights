@@ -13,7 +13,7 @@ import {
 } from '@mui/material';
 import { useGetMediaCard } from '../api.generated';
 import { ExpandMoreOutlined } from '@mui/icons-material';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 interface ExpandMoreProps extends IconButtonProps {
   expand: boolean;
@@ -36,15 +36,24 @@ export default function NewMediaCard(props: {
   const { data, loading, error } = useGetMediaCard({ place: props.name });
 
   const [expanded, setExpanded] = useState(false);
+  const [errorState, setError] = useState(false);
 
   const handleExpandClick = (): void => {
     setExpanded(!expanded);
   };
 
+  useEffect(() => {
+    if (error !== undefined) {
+      if (error?.status === 404) {
+        setError(true);
+      }
+    }
+  }, [error]);
+
   return (
     <>
-      {error?.status ?? (
-        <Card variant="outlined">
+      {!errorState ?
+        <Card variant='outlined'>
           {loading ? (
             <CircularProgress />
           ) : (
@@ -55,10 +64,12 @@ export default function NewMediaCard(props: {
             />
           )}
           <CardContent>
-            <Typography gutterBottom variant="h5" component="div">
+            <Typography gutterBottom variant='h5' component='div'>
               {props.name}
             </Typography>
-            <Typography variant="body2" color="text.secondary">
+
+            {errorState ? <Typography>Moin</Typography> : <></>}
+            <Typography variant='body2' color='text.secondary'>
               {data?.description.short}
             </Typography>
           </CardContent>
@@ -67,24 +78,25 @@ export default function NewMediaCard(props: {
               expand={expanded}
               onClick={handleExpandClick}
               aria-expanded={expanded}
-              aria-label="show more"
+              aria-label='show more'
             >
               <ExpandMoreOutlined />
             </ExpandMore>
           </CardActions>
-          <Collapse in={expanded} timeout="auto" unmountOnExit>
+          <Collapse in={expanded} timeout='auto' unmountOnExit>
             <CardContent>
               {loading ? (
                 <CircularProgress />
               ) : (
-                <Typography variant="body2" color="text.secondary">
+                <Typography variant='body2' color='text.secondary'>
                   {data?.description.long}
                 </Typography>
               )}
             </CardContent>
           </Collapse>
         </Card>
-      )}
+        : <></>}
+
     </>
   );
 }

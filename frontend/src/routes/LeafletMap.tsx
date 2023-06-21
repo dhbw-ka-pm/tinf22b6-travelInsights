@@ -38,6 +38,8 @@ const LeafletMap = (): React.ReactElement => {
         setPinData(data);
         fetchLocation(urlParam);
       }
+    } else {
+      setPinData([]);
     }
   }, [urlParam, data]);
 
