@@ -1,31 +1,36 @@
 import * as React from 'react';
 import { type LatLngLiteral } from 'leaflet';
+import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
 import {
-  MapContainer,
-  TileLayer,
-  useMapEvents
-} from 'react-leaflet';
-import { CircularProgress, Grid, IconButton, InputAdornment, TextField } from '@mui/material';
+  CircularProgress,
+  Grid,
+  IconButton,
+  InputAdornment,
+  TextField
+} from '@mui/material';
 import { Search } from '@mui/icons-material';
 import { type City, useGetTravelDestinationForCountry } from '../api.generated';
-import MediaCard from '../components/MediaCard';
 import { useEffect, useState } from 'react';
 import ResponsiveAppBar from '../components/AppBar';
-import { Link, useLoaderData, useSubmit } from "react-router-dom";
+import { Link, useLoaderData, useSubmit } from 'react-router-dom';
+import NewMediaCard from '../components/NewMediaCard';
 
 const LeafletMap = (): React.ReactElement => {
   const urlParam = useLoaderData() as string;
   const submit = useSubmit();
-  const { loading, data } = useGetTravelDestinationForCountry({ country: urlParam === "browse" ? "Worldwide" : urlParam });
+  const { loading, data } = useGetTravelDestinationForCountry({
+    country: urlParam === 'browse' ? 'Worldwide' : urlParam
+  });
 
-  const [searchValue, setSearchValue] = useState(urlParam === "browse" ? "Worldwide" : urlParam);
+  const [searchValue, setSearchValue] = useState(
+    urlParam === 'browse' ? 'Worldwide' : urlParam
+  );
 
   const [pinData, setPinData] = useState<City[]>();
   const [searchedLocation, setSearchedLocation] = useState<
     LatLngLiteral | undefined
   >(undefined);
   const [mapKey, setMapKey] = useState(0);
-
 
   useEffect(() => {
     if (!loading) {
@@ -59,7 +64,7 @@ const LeafletMap = (): React.ReactElement => {
   ): void => {
     if (event.key === 'Enter') {
       event.preventDefault();
-      submit(null, { method: "get", action: "/map/" + searchValue })
+      submit(null, { method: 'get', action: '/map/' + searchValue });
     }
   };
 
@@ -82,7 +87,7 @@ const LeafletMap = (): React.ReactElement => {
 
   return (
     <>
-    <ResponsiveAppBar />
+      <ResponsiveAppBar />
       <Grid container>
         <Grid item xs={10}>
           <MapContainer
@@ -94,7 +99,7 @@ const LeafletMap = (): React.ReactElement => {
             <MapEvents />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
           </MapContainer>
         </Grid>
@@ -108,11 +113,13 @@ const LeafletMap = (): React.ReactElement => {
               <TextField
                 fullWidth
                 value={searchValue}
-                onKeyDown={(handleKeyDown)}
-                onChange={(event) => {setSearchValue(event.target.value)}}
+                onKeyDown={handleKeyDown}
+                onChange={(event) => {
+                  setSearchValue(event.target.value);
+                }}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position='end'>
+                    <InputAdornment position="end">
                       <IconButton component={Link} to={'/map/' + searchValue}>
                         <Search />
                       </IconButton>
@@ -122,9 +129,13 @@ const LeafletMap = (): React.ReactElement => {
               />
             </Grid>
             <Grid>
-              {loading ? <CircularProgress /> : pinData?.map((city) => {
-                return <MediaCard key={city.name} name={city.name}></MediaCard>;
-              })}
+              {loading ? (
+                <CircularProgress />
+              ) : (
+                pinData?.map((city) => {
+                  return <NewMediaCard key={city.name} name={city.name} />;
+                })
+              )}
             </Grid>
           </Grid>
         </Grid>
