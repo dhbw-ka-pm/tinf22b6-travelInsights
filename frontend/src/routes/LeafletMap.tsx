@@ -19,6 +19,7 @@ import { useEffect, useState } from 'react';
 import ResponsiveAppBar from '../components/AppBar';
 import { Link, useLoaderData, useSubmit } from 'react-router-dom';
 import NewMediaCard from '../components/NewMediaCard';
+import MapMarker from '../components/MapMarker';
 
 const LeafletMap = (): React.ReactElement => {
   const urlParam = useLoaderData() as string;
@@ -83,6 +84,9 @@ const LeafletMap = (): React.ReactElement => {
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
+            {pinData.map((city) => {
+              return <MapMarker name={city.name} key={city.name}></MapMarker>;
+            })}
           </MapContainer>
         </Grid>
         <Grid item xs={2}>
