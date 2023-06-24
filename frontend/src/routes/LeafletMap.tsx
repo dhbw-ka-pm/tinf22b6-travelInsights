@@ -1,15 +1,20 @@
 import * as React from 'react';
 import { type LatLngLiteral } from 'leaflet';
-import { MapContainer, TileLayer, useMapEvents } from 'react-leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import {
-  CircularProgress,
   Grid,
   IconButton,
   InputAdornment,
-  TextField
+  LinearProgress,
+  TextField,
+  Typography
 } from '@mui/material';
-import { Search } from '@mui/icons-material';
-import { type City, useGetTravelDestinationForCountry } from '../api.generated';
+import { ExploreOff, Search } from '@mui/icons-material';
+import {
+  type City,
+  useGetTravelDestinationForCountry,
+  useGetLocationFromString
+} from '../api.generated';
 import { useEffect, useState } from 'react';
 import ResponsiveAppBar from '../components/AppBar';
 import { Link, useLoaderData, useSubmit } from 'react-router-dom';
@@ -18,48 +23,41 @@ import NewMediaCard from '../components/NewMediaCard';
 const LeafletMap = (): React.ReactElement => {
   const urlParam = useLoaderData() as string;
   const submit = useSubmit();
-  const { loading, data } = useGetTravelDestinationForCountry({
-    country: urlParam === 'browse' ? 'Worldwide' : urlParam
-  });
+  const { loading: loadingDestinations, data } =
+    useGetTravelDestinationForCountry({
+      country: urlParam === 'browse' ? 'Worldwide' : urlParam
+    });
+
+  const { loading: loadingLocation, data: location } = useGetLocationFromString(
+    { place: urlParam }
+  );
 
   const [searchValue, setSearchValue] = useState(
     urlParam === 'browse' ? 'Worldwide' : urlParam
   );
 
-  const [pinData, setPinData] = useState<City[]>();
-  const [searchedLocation, setSearchedLocation] = useState<
-    LatLngLiteral | undefined
-  >(undefined);
+  const [pinData, setPinData] = useState<City[]>([]);
+  const [searchedLocation, setSearchedLocation] = useState<LatLngLiteral>({
+    lat: 51.505,
+    lng: -0.09
+  });
   const [mapKey, setMapKey] = useState(0);
 
   useEffect(() => {
-    if (!loading) {
-      if (data != null) {
+    console.log(pinData);
+
+    if (!loadingDestinations && !loadingLocation) {
+      if (data != null && location != null) {
         setPinData(data);
-        fetchLocation(urlParam);
+        setSearchedLocation(location);
+        setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
+      } else {
+        setPinData([]);
       }
     } else {
       setPinData([]);
     }
-  }, [urlParam, data]);
-
-  const fetchLocation = (searchValue: string): void => {
-    fetch(
-      `https://nominatim.openstreetmap.org/search?q=${searchValue}&format=json&limit=1`
-    )
-      // eslint-disable-next-line @typescript-eslint/promise-function-async
-      .then((response) => response.json())
-      .then((data) => {
-        if (data.length > 0) {
-          const { lat, lon } = data[0];
-          setSearchedLocation({ lat: parseFloat(lat), lng: parseFloat(lon) });
-          setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
-        }
-      })
-      .catch((error) => {
-        console.error('Error occurred while searching:', error);
-      });
-  };
+  }, [urlParam, data, location]);
 
   const handleKeyDown = (
     event: React.KeyboardEvent<HTMLInputElement>
@@ -70,23 +68,6 @@ const LeafletMap = (): React.ReactElement => {
     }
   };
 
-  const MapEvents = (): any => {
-    useMapEvents({
-      click: (event) => {
-        const { lat, lng } = event.latlng;
-        setSearchedLocation({ lat, lng });
-        setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
-      }
-    });
-
-    return null;
-  };
-
-  const position: LatLngLiteral = searchedLocation ?? {
-    lat: 51.505,
-    lng: -0.09
-  };
-
   return (
     <>
       <ResponsiveAppBar />
@@ -94,11 +75,10 @@ const LeafletMap = (): React.ReactElement => {
         <Grid item xs={10}>
           <MapContainer
             key={mapKey}
-            center={position}
+            center={searchedLocation}
             zoom={5}
             scrollWheelZoom={true}
           >
-            <MapEvents />
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
@@ -108,10 +88,10 @@ const LeafletMap = (): React.ReactElement => {
         <Grid item xs={2}>
           <Grid
             container
-            style={{ maxHeight: '92vh', overflow: 'auto' }}
-            rowGap={1}
+            direction={'column'}
+            style={{ maxHeight: '92vh', overflow: 'auto', flexWrap: 'nowrap' }}
           >
-            <Grid>
+            <Grid item>
               <TextField
                 fullWidth
                 value={searchValue}
@@ -130,15 +110,35 @@ const LeafletMap = (): React.ReactElement => {
                 }}
               />
             </Grid>
-            <Grid>
-              {loading ? (
-                <CircularProgress />
-              ) : (
-                pinData?.map((city) => {
+            {loadingDestinations ? (
+              <Grid item>
+                <LinearProgress />
+              </Grid>
+            ) : pinData.length > 0 ? (
+              <Grid item>
+                {pinData.map((city) => {
                   return <NewMediaCard key={city.name} name={city.name} />;
-                })
-              )}
-            </Grid>
+                })}
+              </Grid>
+            ) : (
+              <>
+                <Grid
+                  container
+                  sx={{ width: '100%' }}
+                  justifyContent={'center'}
+                >
+                  <Grid item>
+                    <ExploreOff style={{ fontSize: 60 }} />
+                  </Grid>
+                  <Grid item>
+                    <Typography>
+                      {searchValue} was not found. <br /> Try searching for a
+                      country such as 'Spain' or 'France'
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </Grid>
         </Grid>
       </Grid>
