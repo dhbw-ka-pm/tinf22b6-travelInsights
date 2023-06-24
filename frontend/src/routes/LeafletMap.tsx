@@ -2,11 +2,12 @@ import * as React from 'react';
 import { type LatLngLiteral } from 'leaflet';
 import { MapContainer, TileLayer } from 'react-leaflet';
 import {
-  CircularProgress,
   Grid,
   IconButton,
   InputAdornment,
-  TextField
+  LinearProgress,
+  TextField,
+  Typography
 } from '@mui/material';
 import { ExploreOff, Search } from '@mui/icons-material';
 import {
@@ -109,17 +110,35 @@ const LeafletMap = (): React.ReactElement => {
                 }}
               />
             </Grid>
-            <Grid item>
-              {loadingDestinations ? (
-                <CircularProgress />
-              ) : pinData.length > 0 ? (
-                pinData.map((city) => {
+            {loadingDestinations ? (
+              <Grid item>
+                <LinearProgress />
+              </Grid>
+            ) : pinData.length > 0 ? (
+              <Grid item>
+                {pinData.map((city) => {
                   return <NewMediaCard key={city.name} name={city.name} />;
-                })
-              ) : (
-                <ExploreOff style={{ fontSize: 60 }} />
-              )}
-            </Grid>
+                })}
+              </Grid>
+            ) : (
+              <>
+                <Grid
+                  container
+                  sx={{ width: '100%' }}
+                  justifyContent={'center'}
+                >
+                  <Grid item>
+                    <ExploreOff style={{ fontSize: 60 }} />
+                  </Grid>
+                  <Grid item>
+                    <Typography>
+                      {searchValue} was not found. <br /> Try searching for a
+                      country such as 'Spain' or 'France'
+                    </Typography>
+                  </Grid>
+                </Grid>
+              </>
+            )}
           </Grid>
         </Grid>
       </Grid>
