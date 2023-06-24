@@ -19,7 +19,7 @@ export class TravelDestinations extends Controller {
   }>): Promise<Array<City>> {
     return this.parseXmlForCountry(country)
       .then((response) => {
-        if (response.length === 0) {
+        if (typeof response === 'function') {
           return errorResponse(500, { reason: 'Land nicht gefunden!' });
         } else {
           return response;
