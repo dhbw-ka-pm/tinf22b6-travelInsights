@@ -12,8 +12,7 @@ import {
 import { ExploreOff, Search } from '@mui/icons-material';
 import {
   type City,
-  useGetTravelDestinationForCountry,
-  useGetLocationFromString
+  useGetTravelDestinationForCountry
 } from '../api.generated';
 import { useEffect, useState } from 'react';
 import ResponsiveAppBar from '../components/AppBar';
@@ -29,10 +28,6 @@ const LeafletMap = (): React.ReactElement => {
       country: urlParam === 'browse' ? 'Worldwide' : urlParam
     });
 
-  const { loading: loadingLocation, data: location } = useGetLocationFromString(
-    { place: urlParam }
-  );
-
   const [searchValue, setSearchValue] = useState(
     urlParam === 'browse' ? 'Worldwide' : urlParam
   );
@@ -47,7 +42,7 @@ const LeafletMap = (): React.ReactElement => {
   useEffect(() => {
     console.log(pinData);
 
-    if (!loadingDestinations && !loadingLocation) {
+    if (!loadingDestinations) {
       if (data != null && location != null) {
         setPinData(data);
         setSearchedLocation(location);

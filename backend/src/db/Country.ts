@@ -12,10 +12,10 @@ export class Country {
   @PrimaryColumn()
   name: string;
 
-  @Column("float")
+  @Column('float', { nullable: true })
   lat: number;
 
-  @Column("float")
+  @Column('float', { nullable: true })
   lng: number;
 
   @OneToMany((type) => City, (city) => city.country) cities: City[];

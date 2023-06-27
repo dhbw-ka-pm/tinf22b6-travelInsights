@@ -1,5 +1,5 @@
-import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from "typeorm";
-import { Country } from "./Country";
+import { Entity, Column, PrimaryGeneratedColumn, ManyToOne } from 'typeorm';
+import { Country } from './Country';
 
 @Entity()
 export class City {
@@ -12,10 +12,10 @@ export class City {
   @Column()
   imageSrc: string;
 
-  @Column("float")
+  @Column('float', { nullable: true })
   lat: number;
 
-  @Column("float")
+  @Column('float', { nullable: true })
   lng: number;
 
   @Column()
