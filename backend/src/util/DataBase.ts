@@ -33,7 +33,7 @@ export default async function FillDatabase() {
       const json = xml2json(buffer.toString());
 
       const countryRepository = AppDataSource.getRepository(Country);
-      const cityRespoitory = AppDataSource.getRepository(City);
+      const cityRepository = AppDataSource.getRepository(City);
 
       for (let country of json.countries.country) {
         let currentCountry = await countryRepository.find({ where: { name: country.name } });
@@ -64,7 +64,7 @@ export default async function FillDatabase() {
           cityArray = country.city;
         }
         for (let city of cityArray) {
-          let currentCity = await cityRespoitory.find({ where: { name: city.name, country: currentCountry } });
+          let currentCity = await cityRepository.find({ where: { name: city.name, country: currentCountry } });
           let skip = false;
           if (currentCity.length === 0) {
             const googleData = await getGoogleData(city.name).catch(() => {
@@ -90,7 +90,7 @@ export default async function FillDatabase() {
             newCity.lng = cityCoordinates.lng;
             newCity.country = currentCountry[0];
 
-            await cityRespoitory.save(newCity);
+            await cityRepository.save(newCity);
           }
 
         }
