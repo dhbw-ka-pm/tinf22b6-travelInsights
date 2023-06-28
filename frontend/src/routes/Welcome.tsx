@@ -10,7 +10,7 @@ const Welcome = (): ReactElement => {
         <>
             {/* Header */}
             <div className="headerLandingPage">
-                <img id="logo" src="logoTravelInsights.png"/>
+                <img id="logo" src="logoTravelInsights.png" alt={"TravelInsights Logo"}/>
             </div>
             <div className="blurFilter">
                 <div className="searchBar">

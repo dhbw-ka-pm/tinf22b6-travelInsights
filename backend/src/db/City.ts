@@ -21,7 +21,7 @@ export class City {
   @Column()
   shortDescription: string;
 
-  @Column({nullable: true})
+  @Column({ nullable: true })
   longDescription: string;
 
   @ManyToOne((type) => Country, (country) => country.cities) country: Country;

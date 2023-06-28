@@ -21,8 +21,11 @@ yarn gen # generate API code and spec
 
 The backend implements a REST API using TSOA and ExpressJS.
 
-Current hitrate: 80.7%
-6161 Entries in Data Dump to 4973 qualified (but not verified) Data Sets
+Current hitrate: `80.7%`
+
+`6161` Entries in Data Dump to 
+
+`4973` qualified (but not verified) Data Sets
 
 
 ## OpenAPI

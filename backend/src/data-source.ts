@@ -1,13 +1,13 @@
-import { DataSource } from "typeorm";
-import { City } from "./db/City";
-import { Country } from "./db/Country";
+import { DataSource } from 'typeorm';
+import { City } from './db/City';
+import { Country } from './db/Country';
 
 export const AppDataSource = new DataSource({
-  type: "sqlite",
-  database: "data.sqlite3",
+  type: 'sqlite',
+  database: 'data.sqlite3',
   synchronize: true,
   logging: true,
   entities: [City, Country],
   subscribers: [],
-  migrations: [],
+  migrations: []
 });

@@ -18,27 +18,27 @@ const root = ReactDOM.createRoot(
 
 const router = createBrowserRouter([
   {
-    path: "/",
+    path: '/',
     element: <Welcome />,
     errorElement: <ErrorPage />
   },
   {
-    path: "map/:searchValue",
+    path: 'map/:searchValue',
     element: <LeafletMap />,
-    loader: async ({params}) => {
+    loader: async ({ params }) => {
       if (params.searchValue !== null) {
         return params.searchValue;
       } else {
-        return "Worldwide"
+        return 'Worldwide';
       }
-    },
+    }
   },
   {
-    path: "impressum",
+    path: 'impressum',
     element: <Impressum />
   },
   {
-    path: "destinations",
+    path: 'destinations',
     element: <Destinations />
   }
 ]);

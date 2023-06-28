@@ -1,11 +1,10 @@
 import {
   Entity,
   Column,
-  PrimaryGeneratedColumn,
   OneToMany,
-  PrimaryColumn,
-} from "typeorm";
-import { City } from "./City";
+  PrimaryColumn
+} from 'typeorm';
+import { City } from './City';
 
 @Entity()
 export class Country {

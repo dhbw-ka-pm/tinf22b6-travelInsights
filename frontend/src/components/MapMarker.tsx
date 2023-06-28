@@ -6,7 +6,7 @@ export default function MapMarker(props: {
   city: City;
 }): React.ReactElement {
   return (
-    <Marker position={{lat: props.city.lat, lng: props.city.lng}}>
+    <Marker position={{ lat: props.city.lat, lng: props.city.lng }}>
       <Popup>{props.city.shortDescription}</Popup>
     </Marker>
   );

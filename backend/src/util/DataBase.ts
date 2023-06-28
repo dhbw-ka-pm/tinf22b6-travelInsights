@@ -2,15 +2,30 @@ import { AppDataSource } from '../data-source';
 import { readFile } from 'fs/promises';
 import xml2json from '@hendt/xml2json/lib';
 import { Country } from '../db/Country';
-import { IGeoLocation } from '../api/CityData';
 import { City } from '../db/City';
 import axios from 'axios';
+
+export interface ICityDescription {
+  short: string;
+  long: string;
+}
+
+export interface ICityData {
+  imageUrl: string;
+  description: ICityDescription;
+  location: IGeoLocation;
+}
+
+export interface IGeoLocation {
+  lat: number;
+  lng: number;
+}
 
 export default async function FillDatabase() {
   const countryRepository = AppDataSource.getRepository(Country);
   let count = await countryRepository.count();
   if (count !== 0) {
-    console.log("There are rows in the database, skipping data fetching! Amount rows:", count);
+    console.log('There are rows in the database, skipping data fetching! Amount rows:', count);
     return;
   }
   return readFile(__dirname + '/out.xml')
@@ -40,11 +55,11 @@ export default async function FillDatabase() {
           continue;
         }
 
-        let cityArray = []
+        let cityArray = [];
         if (country.city === undefined) {
           cityArray = [];
         } else if (country.city.length === undefined) {
-          cityArray.push(country.city)
+          cityArray.push(country.city);
         } else {
           cityArray = country.city;
         }
@@ -55,7 +70,7 @@ export default async function FillDatabase() {
             const googleData = await getGoogleData(city.name).catch(() => {
               console.log('Google API reject for', city.name);
               skip = true;
-              return { image: '', description: '' }
+              return { image: '', description: '' };
             });
             const wikiData = await getWikipediaDescription(city.name).catch(() => {
               return 'No Wiki information available!';
@@ -63,7 +78,7 @@ export default async function FillDatabase() {
             const cityCoordinates = await getCoordinates(city.name).catch(() => {
               console.log('City coordinates not found for', city.name);
               skip = true;
-              return { lat: 0, lng: 0}
+              return { lat: 0, lng: 0 };
             });
             if (skip) continue;
             const newCity = new City();
@@ -77,14 +92,14 @@ export default async function FillDatabase() {
 
             await cityRespoitory.save(newCity);
           }
-            
+
         }
       }
     })
     .catch((reason) => {
       return Promise.reject(reason);
     });
-  }
+}
 
 
 async function getCoordinates(place: string): Promise<IGeoLocation> {
@@ -136,4 +151,4 @@ async function getWikipediaDescription(place: string): Promise<string> {
         return pages[page].extract;
       }
     });
-};
+}
