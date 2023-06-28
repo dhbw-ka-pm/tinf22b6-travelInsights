@@ -12,13 +12,12 @@ import {
 import { ExploreOff, Search } from '@mui/icons-material';
 import {
   type City,
-  useGetTravelDestinationForCountry,
-  useGetLocationFromString
+  useGetTravelDestinationForCountry
 } from '../api.generated';
 import { useEffect, useState } from 'react';
 import ResponsiveAppBar from '../components/AppBar';
 import { Link, useLoaderData, useSubmit } from 'react-router-dom';
-import NewMediaCard from '../components/NewMediaCard';
+import MediaCard from '../components/MediaCard';
 import MapMarker from '../components/MapMarker';
 
 const LeafletMap = (): React.ReactElement => {
@@ -28,10 +27,6 @@ const LeafletMap = (): React.ReactElement => {
     useGetTravelDestinationForCountry({
       country: urlParam === 'browse' ? 'Worldwide' : urlParam
     });
-
-  const { loading: loadingLocation, data: location } = useGetLocationFromString(
-    { place: urlParam }
-  );
 
   const [searchValue, setSearchValue] = useState(
     urlParam === 'browse' ? 'Worldwide' : urlParam
@@ -47,10 +42,10 @@ const LeafletMap = (): React.ReactElement => {
   useEffect(() => {
     console.log(pinData);
 
-    if (!loadingDestinations && !loadingLocation) {
-      if (data != null && location != null) {
-        setPinData(data);
-        setSearchedLocation(location);
+    if (!loadingDestinations) {
+      if (data != null) {
+        setPinData(data.cities);
+        setSearchedLocation({ lat: data.lat, lng: data.lng });
         setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
       } else {
         setPinData([]);
@@ -82,10 +77,10 @@ const LeafletMap = (): React.ReactElement => {
           >
             <TileLayer
               attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              url='https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png'
             />
             {pinData.map((city) => {
-              return <MapMarker name={city.name} key={city.name}></MapMarker>;
+              return <MapMarker city={city} key={city.name} />;
             })}
           </MapContainer>
         </Grid>
@@ -105,7 +100,7 @@ const LeafletMap = (): React.ReactElement => {
                 }}
                 InputProps={{
                   endAdornment: (
-                    <InputAdornment position="end">
+                    <InputAdornment position='end'>
                       <IconButton component={Link} to={'/map/' + searchValue}>
                         <Search />
                       </IconButton>
@@ -121,7 +116,7 @@ const LeafletMap = (): React.ReactElement => {
             ) : pinData.length > 0 ? (
               <Grid item>
                 {pinData.map((city) => {
-                  return <NewMediaCard key={city.name} name={city.name} />;
+                  return <MediaCard key={city.name} city={city} />;
                 })}
               </Grid>
             ) : (

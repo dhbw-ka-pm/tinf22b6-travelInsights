@@ -1,24 +1,13 @@
 import * as React from 'react';
-import { useGetLocationFromString } from '../api.generated';
 import { Marker, Popup } from 'react-leaflet';
-import { type LatLngLiteral } from 'leaflet';
+import { type City } from '../api.generated';
 
 export default function MapMarker(props: {
-  name: string;
-}): React.ReactElement<{ name: string }> {
-  const { loading, data } = useGetLocationFromString({ place: props.name });
-  const [position, setPosition] = React.useState<LatLngLiteral>({
-    lat: 0,
-    lng: 0
-  });
-
-  React.useEffect(() => {
-    if (!loading) if (data != null) setPosition(data);
-  }, [data]);
-
+  city: City;
+}): React.ReactElement {
   return (
-    <Marker position={position}>
-      <Popup>{props.name}</Popup>
+    <Marker position={{ lat: props.city.lat, lng: props.city.lng }}>
+      <Popup>{props.city.shortDescription}</Popup>
     </Marker>
   );
 }

@@ -10,15 +10,15 @@ import { Link } from 'react-router-dom';
 
 function ResponsiveAppBar(): React.ReactElement {
   return (
-    <AppBar position="static">
-      <Container maxWidth="xl">
+    <AppBar position='static'>
+      <Container maxWidth='xl'>
         <Toolbar disableGutters>
           <Button component={Link} to={'/'}>
             <FlightTakeoffIcon
               sx={{ color: 'white', display: 'flex', mr: 1 }}
             />
             <Typography
-              variant="h6"
+              variant='h6'
               noWrap
               sx={{
                 mr: 2,
@@ -33,7 +33,7 @@ function ResponsiveAppBar(): React.ReactElement {
               Travel Insights
             </Typography>
             <Typography
-              variant="h6"
+              variant='h6'
               noWrap
               sx={{
                 mr: 2,
@@ -50,12 +50,12 @@ function ResponsiveAppBar(): React.ReactElement {
           </Button>
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
             <Button component={Link} to={'/destinations'}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Reiseziele
             </Button>
             <Button component={Link} to={'/impressum'}
-              sx={{ my: 2, color: 'white', display: 'block' }}
+                    sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Impressum
             </Button>
@@ -65,4 +65,5 @@ function ResponsiveAppBar(): React.ReactElement {
     </AppBar>
   );
 }
+
 export default ResponsiveAppBar;
