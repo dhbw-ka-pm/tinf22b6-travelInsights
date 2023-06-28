@@ -6,90 +6,84 @@ import { IGeoLocation } from '../api/CityData';
 import { City } from '../db/City';
 import axios from 'axios';
 
-interface ICity {
-  name: string;
-}
-
-interface ICountry {
-  name: string;
-  cities: Array<ICity>;
-}
-
 export default async function FillDatabase() {
   const countryRepository = AppDataSource.getRepository(Country);
   let count = await countryRepository.count();
-  console.log(count);
-    return readFile(__dirname + '/out.xml')
-      .then(async (buffer) => {
-        const json = xml2json(buffer.toString());
+  if (count !== 0) {
+    console.log("There are rows in the database, skipping data fetching! Amount rows:", count);
+    return;
+  }
+  return readFile(__dirname + '/out.xml')
+    .then(async (buffer) => {
+      const json = xml2json(buffer.toString());
 
-        const countryRepository = AppDataSource.getRepository(Country);
-        const cityRespoitory = AppDataSource.getRepository(City);
+      const countryRepository = AppDataSource.getRepository(Country);
+      const cityRespoitory = AppDataSource.getRepository(City);
 
-        for (let country of json.countries.country) {
-          let currentCountry = await countryRepository.find({ where: { name: country.name } });
-          console.log(currentCountry);
+      for (let country of json.countries.country) {
+        let currentCountry = await countryRepository.find({ where: { name: country.name } });
+        console.log(currentCountry);
 
-          if (currentCountry.length === 0) {
-            console.log('Country not found, creating new for', country);
-            const newCountry = new Country();
-            const countryCoordinates = await getCoordinates(country.name).catch(() => {
-              return Promise.reject('Country coordinates not found for ' + country.name);
-            });
-            newCountry.lat = countryCoordinates.lat;
-            newCountry.lng = countryCoordinates.lng;
-            newCountry.name = country.name;
-            newCountry.cities = [];
-            await countryRepository.save(newCountry);
-            currentCountry = await countryRepository.find({ where: { name: country.name } });
-          } else {
-            continue;
-          }
-
-          let cityArray = []
-          if (country.city === undefined) {
-            cityArray = [];
-          } else if (country.city.length === undefined) {
-            cityArray.push(country.city)
-          } else {
-            cityArray = country.city;
-          }
-          for (let city of cityArray) {
-            let currentCity = await cityRespoitory.find({ where: { name: city.name, country: currentCountry } });
-            let skip = false;
-            if (currentCity.length === 0) {
-              const googleData = await getGoogleData(city.name).catch(() => {
-                console.log('Google API reject for', city.name);
-                skip = true;
-                return { image: '', description: '' }
-              });
-              const wikiData = await getWikipediaDescription(city.name).catch(() => {
-                return 'No Wiki information available!';
-              });
-              const cityCoordinates = await getCoordinates(city.name).catch(() => {
-                console.log('City coordinates not found for', city.name);
-                skip = true;
-                return { lat: 0, lng: 0}
-              });
-              if (skip) continue;
-              const newCity = new City();
-              newCity.name = city.name;
-              newCity.shortDescription = googleData.description;
-              newCity.longDescription = wikiData;
-              newCity.imageSrc = googleData.image;
-              newCity.lat = cityCoordinates.lat;
-              newCity.lng = cityCoordinates.lng;
-              newCity.country = currentCountry[0];
-  
-              await cityRespoitory.save(newCity);
-            }
-              
-          }
+        if (currentCountry.length === 0) {
+          console.log('Country not found, creating new for', country);
+          const newCountry = new Country();
+          const countryCoordinates = await getCoordinates(country.name).catch(() => {
+            return Promise.reject('Country coordinates not found for ' + country.name);
+          });
+          newCountry.lat = countryCoordinates.lat;
+          newCountry.lng = countryCoordinates.lng;
+          newCountry.name = country.name;
+          newCountry.cities = [];
+          await countryRepository.save(newCountry);
+          currentCountry = await countryRepository.find({ where: { name: country.name } });
+        } else {
+          continue;
         }
-      })
-      .catch((reason) => {
-        return Promise.reject(reason);
-      });
+
+        let cityArray = []
+        if (country.city === undefined) {
+          cityArray = [];
+        } else if (country.city.length === undefined) {
+          cityArray.push(country.city)
+        } else {
+          cityArray = country.city;
+        }
+        for (let city of cityArray) {
+          let currentCity = await cityRespoitory.find({ where: { name: city.name, country: currentCountry } });
+          let skip = false;
+          if (currentCity.length === 0) {
+            const googleData = await getGoogleData(city.name).catch(() => {
+              console.log('Google API reject for', city.name);
+              skip = true;
+              return { image: '', description: '' }
+            });
+            const wikiData = await getWikipediaDescription(city.name).catch(() => {
+              return 'No Wiki information available!';
+            });
+            const cityCoordinates = await getCoordinates(city.name).catch(() => {
+              console.log('City coordinates not found for', city.name);
+              skip = true;
+              return { lat: 0, lng: 0}
+            });
+            if (skip) continue;
+            const newCity = new City();
+            newCity.name = city.name;
+            newCity.shortDescription = googleData.description;
+            newCity.longDescription = wikiData;
+            newCity.imageSrc = googleData.image;
+            newCity.lat = cityCoordinates.lat;
+            newCity.lng = cityCoordinates.lng;
+            newCity.country = currentCountry[0];
+
+            await cityRespoitory.save(newCity);
+          }
+            
+        }
+      }
+    })
+    .catch((reason) => {
+      return Promise.reject(reason);
+    });
   }
 
 
