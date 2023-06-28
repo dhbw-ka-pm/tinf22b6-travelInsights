@@ -4,7 +4,7 @@ import 'reflect-metadata';
 
 import { RegisterRoutes } from './routes.generated';
 import { AppDataSource } from './data-source';
-import { FillDatabase } from './util/DataBase';
+import FillDatabase from './util/DataBase';
 
 const serverPort = 4567;
 
@@ -30,5 +30,3 @@ AppDataSource.initialize()
     });
   })
   .catch((error) => console.log(error));
-
-
