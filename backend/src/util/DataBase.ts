@@ -38,7 +38,7 @@ export async function FillDatabase() {
             console.log('Country not found, creating new for', country);
             const newCountry = new Country();
             const countryCoordinates = await getCoordinates(country.name).catch(() => {
-              return Promise.reject();
+              return Promise.reject('Country coordinates not found for ' + country.name);
             });
             newCountry.lat = countryCoordinates.lat;
             newCountry.lng = countryCoordinates.lng;
@@ -49,47 +49,30 @@ export async function FillDatabase() {
           }
 
           for (let city of country.city) {
-            // TODO Städte einfügen
-          }
-
-          let currentCity = await cityRespoitory.find({ where: { country: currentCountry } });
-
-          if (currentCity.length === 0) {
-
-            const googleData = await getGoogleData(place).catch(() => {
-              return Promise.reject('Google Api Reject');
-            });
-            const wikiData = await getWikipediaDescription(place).catch(() => {
-              return 'No Wiki information available!';
-            });
-            const cityCoordinates = await getCoordinates(place).catch(() => {
-              return Promise.reject('Coordinates not found');
-            });
-            const city = new City();
-            city.name = place;
-            city.shortDescription = googleData.description;
-            city.longDescription = wikiData;
-            city.imageSrc = googleData.image;
-            city.lat = cityCoordinates.lat;
-            city.lng = cityCoordinates.lng;
-            city.country = currentCountry[0];
-
-            await cityRespoitory.save(city);
-          }
-
-          currentCity = await cityRespoitory.find({ where: { country: currentCountry } });
-          return {
-            location: {
-              lat: currentCity[0].lat,
-              lng: currentCity[0].lng
-            },
-            imageUrl: currentCity[0].imageSrc,
-            description: {
-              short: currentCity[0].longDescription,
-              long: currentCity[0].shortDescription
+            let currentCity = await cityRespoitory.find({ where: { name: city.name, country: currentCountry } });
+            if (currentCity.length === 0) {
+              const googleData = await getGoogleData(city.name).catch(() => {
+                return Promise.reject('Google Api Reject');
+              });
+              const wikiData = await getWikipediaDescription(city.name).catch(() => {
+                return 'No Wiki information available!';
+              });
+              const cityCoordinates = await getCoordinates(city.name).catch(() => {
+                return Promise.reject('City coordinates not found for ' + city.name);
+              });
+              const newCity = new City();
+              newCity.name = city.name;
+              newCity.shortDescription = googleData.description;
+              newCity.longDescription = wikiData;
+              newCity.imageSrc = googleData.image;
+              newCity.lat = cityCoordinates.lat;
+              newCity.lng = cityCoordinates.lng;
+              newCity.country = currentCountry[0];
+  
+              await cityRespoitory.save(newCity);
             }
-          };
-
+              
+          }
         }
       })
       .catch((reason) => {
