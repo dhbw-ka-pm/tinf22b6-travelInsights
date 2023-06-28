@@ -41,18 +41,21 @@ export default async function FillDatabase() {
             newCountry.name = country.name;
             newCountry.cities = [];
             await countryRepository.save(newCountry);
-            currentCountry = await countryRepository.find({ where: { name: country } });
+            currentCountry = await countryRepository.find({ where: { name: country.name } });
+          } else {
+            continue;
           }
 
           let cityArray = []
-          if (country.city.length === undefined) {
+          if (country.city === undefined) {
+            cityArray = [];
+          } else if (country.city.length === undefined) {
             cityArray.push(country.city)
           } else {
             cityArray = country.city;
           }
           for (let city of cityArray) {
             let currentCity = await cityRespoitory.find({ where: { name: city.name, country: currentCountry } });
-            if (currentCity.length > 0) continue;
             let skip = false;
             if (currentCity.length === 0) {
               const googleData = await getGoogleData(city.name).catch(() => {

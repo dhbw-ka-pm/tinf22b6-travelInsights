@@ -43,9 +43,9 @@ const LeafletMap = (): React.ReactElement => {
     console.log(pinData);
 
     if (!loadingDestinations) {
-      if (data != null && location != null) {
-        setPinData(data);
-        setSearchedLocation(location);
+      if (data != null) {
+        setPinData(data.cities);
+        setSearchedLocation({lat: data.lat, lng: data.lng});
         setMapKey((prevKey) => prevKey + 1); // Update mapKey to remount MapContainer
       } else {
         setPinData([]);
@@ -80,7 +80,7 @@ const LeafletMap = (): React.ReactElement => {
               url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             />
             {pinData.map((city) => {
-              return <MapMarker name={city.name} key={city.name}></MapMarker>;
+              return <MapMarker city={city} key={city.name} />;
             })}
           </MapContainer>
         </Grid>

@@ -12,10 +12,10 @@ export class City {
   @Column()
   imageSrc: string;
 
-  @Column('float', { nullable: true })
+  @Column('float')
   lat: number;
 
-  @Column('float', { nullable: true })
+  @Column('float')
   lng: number;
 
   @Column()
