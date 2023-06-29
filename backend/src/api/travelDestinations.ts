@@ -7,7 +7,7 @@ export class TravelDestinations extends Controller {
   @Get('{country}')
   public async getTravelDestinationForCountry(@Path() country: string): Promise<Country> {
     const countryRepository = AppDataSource.getRepository(Country);
-    let currentCountry = await countryRepository.find({ where: { name: country }, relations: { cities: true } });
+    let currentCountry = await countryRepository.find({ where: { name: country.charAt(0).toUpperCase()+ country.slice(1) }, relations: { cities: true } });
     if (currentCountry.length != 0) {
       return currentCountry[0];
     } else {
