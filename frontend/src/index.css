@@ -7,6 +7,15 @@ body {
     -moz-osx-font-smoothing: grayscale;
 }
 
+button {
+    color: white;
+    background-color: #1976D2;
+    cursor: pointer;
+    border: none;
+    padding: 4px 5px;
+    border-radius: 5px;
+}
+
 a {
     text-decoration: none;
 }
@@ -73,5 +82,4 @@ code {
         background-position: right center;
     }
 }
-
 
