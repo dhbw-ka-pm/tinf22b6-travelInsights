@@ -6,11 +6,20 @@ import { Search } from "@mui/icons-material";
 const Welcome = (): ReactElement => {
     const [searchTerm, setSearchTerm] = useState("");
 
+    const handleKeyDown = (
+        event: React.KeyboardEvent<HTMLInputElement>
+      ): void => {
+        if (event.key === 'Enter') {
+          window.location.href = '/map/' + searchTerm
+        }
+      };
+    
+
     return (
         <>
             {/* Header */}
             <div className="headerLandingPage">
-                <img id="logo" src="logoTravelInsights.png" alt={"TravelInsights Logo"}/>
+                <img id="logo" src="Logo_bigger.png" alt={"TravelInsights Logo"}/>
             </div>
             <div className="blurFilter">
                 <div className="searchBar">
@@ -18,6 +27,7 @@ const Welcome = (): ReactElement => {
                         <TextField 
                             sx={{width:'40vw'}}
                             value={searchTerm} 
+                            onKeyDown={handleKeyDown}
                             onChange={(event) => {setSearchTerm(event.target.value)}}
                             placeholder="Wohin geht es als nächstes?"
                             InputProps={{
@@ -34,7 +44,9 @@ const Welcome = (): ReactElement => {
             </div>
 
             {/* Mitte */}
+            <div className = "container">
             <div className="worldBackground"></div>
+            </div>
             
             {/* Footer */}
             <footer className="footerLandingPage">
