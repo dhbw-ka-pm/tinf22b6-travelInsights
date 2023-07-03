@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { Marker, Popup } from 'react-leaflet';
 import { type City } from '../api.generated';
+import Button from '@mui/material/Button';
+import Typography from '@mui/material/Typography';
 
 export default function MapMarker(props: {
   city: City;
@@ -20,10 +22,10 @@ export default function MapMarker(props: {
   return (
     <Marker position={{ lat: props.city.lat, lng: props.city.lng }}>
       <Popup>
-        <p>
+        <Typography>
           {props.city.shortDescription}
-        </p>
-        <button onClick={downloadDescriptionFunc} >Download description</button>
+        </Typography>
+        <Button size='small' variant='contained' color='primary' onClick={downloadDescriptionFunc} >Download description</Button>
       </Popup>
     </Marker>
   );
