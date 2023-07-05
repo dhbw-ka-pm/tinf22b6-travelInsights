@@ -10,4 +10,4 @@ import createTheme, { type ThemeOptions } from "@mui/material/styles/createTheme
     },
   },
 };
-export const theme = createTheme(themeOptions)
+export const theme = createTheme(themeOptions);

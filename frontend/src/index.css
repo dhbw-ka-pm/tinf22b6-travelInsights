@@ -1,101 +1,57 @@
 body {
-    margin: 0;
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
     'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
     sans-serif;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-
 a {
-    text-decoration: none;
+  text-decoration: none;
 }
 
 code {
-    font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
 
 .leaflet-container {
-    height: 92vh;
+  height: 92vh;
 }
 
 .blurFilter {
-    position: fixed;
-    backdrop-filter: blur(10px);
-    z-index: 10;
-    width: 100%;
-    height: 100%;
-}
-
-.headerLandingPage {
-    background-color: rgb(39,42,83);
-    width: 100%;
-    height: 15vh;
-}
-
-.headerLandingPage img {
-    height: 15vh;
-    display: block;
-    margin: 0 auto;
-}
-
-.footerLandingPage {
-    position: fixed;
-    bottom: 0;
-    background-color: rgb(39,42,83);
-    width: 100%;
-    height: 15vh;
-    z-index: 999;
+  position: fixed;
+  backdrop-filter: blur(10px);
+  z-index: 10;
+  width: 100%;
+  height: 70vh;
 }
 
 .searchBar {
-    width: fit-content;
-    display: block;
-    margin: 25vh auto;
-}
-/*
-.worldBackground {
-    width: 100%;
-    height: 70vh;
-    background-image: url('../public/worldmap2x.png');
-    background-repeat: repeat-x;
-    background-position: left center;
-    background-attachment: fixed;
-    animation: backgroundMove 40s linear infinite;
-    
+  width: fit-content;
+  display: block;
+  margin: 25vh auto;
 }
 
-
-@keyframes backgroundMove {
-    0%{ 
-        background-position: left center;
-    }
-    100% {
-     background-position: right center;
-    }
-}
-*/
 .container {
-    overflow: hidden;
-  }
-  
-  .worldBackground {
-    background: url("../public/worldmap2x.png") repeat-x;
-    height: 75vh;
-    width: 3824px;
-    background-size: 50% 75vh;
-    
-    animation: slide 30s linear infinite;
-  }
-  
-  @keyframes slide{
-    0% {
-      transform: translate3d(0, 0, 0);
-    }
-    100% {
-      transform: translate3d(-1912px, 0, 0);
-    }
-  }
+  overflow: hidden;
+}
 
+.worldBackground {
+  background: url('../public/worldmap2x.png') repeat-x;
+  height: 75vh;
+  width: 3824px;
+  background-size: 50% 75vh;
+
+  animation: slide 30s linear infinite;
+}
+
+@keyframes slide {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  100% {
+    transform: translate3d(-1912px, 0, 0);
+  }
+}
