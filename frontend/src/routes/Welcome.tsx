@@ -1,5 +1,5 @@
 import React, {type ReactElement, useState} from "react";
-import {Button, IconButton, InputAdornment, Paper, TextField} from "@mui/material";
+import {IconButton, InputAdornment, Paper, TextField} from "@mui/material";
 import { Link } from "react-router-dom";
 import { Search } from "@mui/icons-material";
 
@@ -10,7 +10,7 @@ const Welcome = (): ReactElement => {
         event: React.KeyboardEvent<HTMLInputElement>
       ): void => {
         if (event.key === 'Enter') {
-          window.location.href = '/map/' + searchTerm
+          window.location.href = '/map/' + (searchTerm === '' ? 'Worldwide' : searchTerm);
         }
       };
     
@@ -33,7 +33,7 @@ const Welcome = (): ReactElement => {
                             InputProps={{
                                 endAdornment: (
                                 <InputAdornment position='end'>
-                                    <IconButton component={Link} to={'/map/' + searchTerm}>
+                                    <IconButton component={Link} to={'/map/' + (searchTerm === '' ? 'Worldwide' : searchTerm)}>
                                     <Search />
                                     </IconButton>
                                 </InputAdornment>
