@@ -40,8 +40,6 @@ const LeafletMap = (): React.ReactElement => {
   const [mapKey, setMapKey] = useState(0);
 
   useEffect(() => {
-    console.log(pinData);
-
     if (!loadingDestinations) {
       if (data != null) {
         setPinData(data.cities);

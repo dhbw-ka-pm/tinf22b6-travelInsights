@@ -20,7 +20,17 @@ export default function MapMarker(props: {
     document.body.removeChild(element);
   }
   return (
-    <Marker position={{ lat: props.city.lat, lng: props.city.lng }}>
+    <>
+    <Marker key={`${props.city.name} original`} position={{ lat: props.city.lat, lng: props.city.lng }}>
+    <Popup>
+      <Typography>
+        {props.city.shortDescription}
+      </Typography>
+      <Button size='small' variant='contained' color='primary' onClick={downloadDescriptionFunc} >Download description</Button>
+    </Popup>
+  </Marker>
+    {[-4,-3,-2,-1,1,2,3,4].map((offset) => 
+      <Marker key={`${props.city.name} ${offset}`} position={{ lat: props.city.lat, lng: props.city.lng + (offset*360) }}>
       <Popup>
         <Typography>
           {props.city.shortDescription}
@@ -28,5 +38,7 @@ export default function MapMarker(props: {
         <Button size='small' variant='contained' color='primary' onClick={downloadDescriptionFunc} >Download description</Button>
       </Popup>
     </Marker>
+    )}
+    </>
   );
 }
