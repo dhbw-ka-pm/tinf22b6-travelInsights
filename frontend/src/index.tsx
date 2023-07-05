@@ -11,6 +11,8 @@ import ErrorPage from './error-page';
 import LeafletMap from './routes/LeafletMap';
 import Impressum from './routes/Impressum';
 import Destinations from './routes/Destinations';
+import { ThemeProvider } from '@emotion/react';
+import {theme} from './theme';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -45,6 +47,8 @@ const router = createBrowserRouter([
 
 root.render(
   <React.StrictMode>
+    <ThemeProvider theme={theme}>
     <RouterProvider router={router} />
+    </ThemeProvider>
   </React.StrictMode>
 );

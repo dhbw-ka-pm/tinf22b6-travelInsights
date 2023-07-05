@@ -50,7 +50,7 @@ const Welcome = (): ReactElement => {
             
             {/* Footer */}
             <footer className="footerLandingPage">
-                <Button component={Link} to={'map/browse'}>Browse Map</Button>
+                
             </footer>
         </>
     );
