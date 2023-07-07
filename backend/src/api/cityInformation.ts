@@ -1,6 +1,5 @@
 import { Controller, Get, Path, Route } from 'tsoa';
 import { AppDataSource } from '../data-source';
-import { Country } from '../db/Country';
 import {City} from "../db/City";
 import {js2xml} from "xml-js";
 
