@@ -5,7 +5,6 @@ import {js2xml} from "xml-js";
 
 @Route('cityInformation')
 export class CityInformation extends Controller {
-    private select: any;
     @Get('{city}')
     public async getCityInformation(@Path() city: string): Promise<string> {
         const countryRepository = AppDataSource.getRepository(City);
