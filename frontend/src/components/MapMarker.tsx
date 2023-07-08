@@ -12,15 +12,46 @@ export default function MapMarker(props: {
 
   // This function => downloads the discription in the text file format
   const downloadDescriptionFunc = (): void => {
-    const descString = props.city.shortDescription;
-    const filename = 'description.txt';
-    const element = document.createElement('a');
-    const file = new Blob([descString], { type: 'text/plain' });
-    element.href = URL.createObjectURL(file);
-    element.download = filename;
-    document.body.appendChild(element);
-    element.click();
-    document.body.removeChild(element);
+  const cityName = props.city.name;
+  const cityDescription = props.city.shortDescription;
+
+  // Extract the weather data
+  const weatherDataRegex = /<text xmlns="http:\/\/www.w3.org\/2000\/svg" x="(\d+)" y="30" font-size="16">(\d{4}-\d{2}-\d{2})<\/text>[\s\S]*?<text xmlns="http:\/\/www.w3.org\/2000\/svg" x="\1" y="160" font-size="14" fill="red">Max\.: (\d+\.\d+)°C<\/text>[\s\S]*?<text xmlns="http:\/\/www.w3.org\/2000\/svg" x="\1" y="180" font-size="14" fill="#272a53">Min\.: (\d+\.\d+)°C<\/text>/g;
+  let weatherDataMatch;
+  const weatherData = [];
+  while ((weatherDataMatch = weatherDataRegex.exec(innerString.__html)) !== null) {
+    weatherData.push({
+      date: weatherDataMatch[2],
+      high: weatherDataMatch[3],
+      low: weatherDataMatch[4]
+    });
+  }
+
+  // Generate new XML
+    const newXml =
+        `<traveldestination>
+            <Name>${cityName}</Name>
+            <Description>${cityDescription}</Description>
+            <Weather>
+                ${weatherData.slice(0, 3).map(day =>
+                `<Day date="${day.date}">
+                    <High>${day.high}</High>
+                    <Low>${day.low}</Low>
+                </Day>`
+                ).join('\n')}
+            </Weather>
+        </traveldestination>`;
+
+
+  // Download the new XML
+  const filename = 'description.xml';
+  const element = document.createElement('a');
+  const file = new Blob([newXml], { type: 'application/xml' });
+  element.href = URL.createObjectURL(file);
+  element.download = filename;
+  document.body.appendChild(element);
+  element.click();
+  document.body.removeChild(element);
   }
 
   useEffect(() => {
