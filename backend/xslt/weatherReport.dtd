@@ -1,0 +1,8 @@
+<!DOCTYPE weatherReports [
+        <!ELEMENT weatherReports (report)*>
+        <!ELEMENT report (date|weatherCode|minTemp|maxTemp)*>
+        <!ELEMENT date (#PCDATA)>
+        <!ELEMENT weatherCode (#PCDATA)>
+        <!ELEMENT minTemp (#PCDATA)>
+        <!ELEMENT maxTemp (#PCDATA)>
+        ]>
