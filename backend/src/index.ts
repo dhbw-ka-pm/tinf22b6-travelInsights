@@ -49,7 +49,7 @@ function xmlify(weatherReport: any): string {
     })
   }
   const weatherReportReply = { report: array };
-  const test = `<?xml version="1.0" encoding="UTF-8"?><weatherReports>${js2xml(weatherReportReply, { compact: true })}</weatherReports>`;
+  const test = `<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE weatherReports SYSTEM "weatherReport.dtd"><weatherReports>${js2xml(weatherReportReply, { compact: true })}</weatherReports>`;
   return test;
 }
 
