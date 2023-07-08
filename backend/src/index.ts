@@ -20,22 +20,22 @@ app.get('/api/weather/:city', async (req, res) => {
   res.setHeader('Content-Type', 'application/xml')
   const city = req.params.city;
   const cityRepository = AppDataSource.getRepository(City);
-    let resultCity = await cityRepository.find({ where: { name: city.charAt(0).toUpperCase() + city.slice(1) } });
-    let currentCity: City;
-    if (resultCity.length > 0) {
-      currentCity = resultCity[0];
-      const startDate = "2023-07-08";
-      const endDate = "2023-07-14"
-      try {
-        const data = await axios
-          .get(`https://api.open-meteo.com/v1/forecast?latitude=${currentCity.lat}&longitude=${currentCity.lng}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${startDate}&end_date=${endDate}`);
-        res.send(xmlify(data.data));
-      } catch {
-        res.sendStatus(500);
-      }
-    } else {
+  let resultCity = await cityRepository.find({ where: { name: city.charAt(0).toUpperCase() + city.slice(1) } });
+  let currentCity: City;
+  if (resultCity.length > 0) {
+    currentCity = resultCity[0];
+    const startDate = "2023-07-08";
+    const endDate = "2023-07-10"
+    try {
+      const data = await axios
+        .get(`https://api.open-meteo.com/v1/forecast?latitude=${currentCity.lat}&longitude=${currentCity.lng}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${startDate}&end_date=${endDate}`);
+      res.send(xmlify(data.data));
+    } catch {
       res.sendStatus(500);
     }
+  } else {
+    res.sendStatus(500);
+  }
 });
 
 function xmlify(weatherReport: any): string {
