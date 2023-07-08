@@ -1,6 +1,6 @@
 import { Paper } from '@mui/material';
 import * as React from 'react';
-import ResponsiveAppBar from '../components/AppBar';
+import ResponsiveAppBar from '../components/ResponsiveAppBar';
 
 const Impressum = (): React.ReactElement => {
   return (

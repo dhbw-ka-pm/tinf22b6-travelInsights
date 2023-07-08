@@ -49,11 +49,6 @@ function ResponsiveAppBar(): React.ReactElement {
             </Typography>
           </Button>
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
-            <Button component={Link} to={'/destinations'}
-                    sx={{ my: 2, color: 'white', display: 'block' }}
-            >
-              Reiseziele
-            </Button>
             <Button component={Link} to={'/impressum'}
                     sx={{ my: 2, color: 'white', display: 'block' }}
             >

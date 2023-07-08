@@ -10,7 +10,6 @@ import Welcome from './routes/Welcome';
 import ErrorPage from './error-page';
 import LeafletMap from './routes/LeafletMap';
 import Impressum from './routes/Impressum';
-import Destinations from './routes/Destinations';
 import { ThemeProvider } from '@emotion/react';
 import {theme} from './theme';
 
@@ -38,10 +37,6 @@ const router = createBrowserRouter([
   {
     path: 'impressum',
     element: <Impressum />
-  },
-  {
-    path: 'destinations',
-    element: <Destinations />
   }
 ]);
 

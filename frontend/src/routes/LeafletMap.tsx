@@ -15,7 +15,7 @@ import {
   useGetTravelDestinationForCountry
 } from '../api.generated';
 import { useEffect, useState } from 'react';
-import ResponsiveAppBar from '../components/AppBar';
+import ResponsiveAppBar from '../components/ResponsiveAppBar';
 import { Link, useLoaderData, useSubmit } from 'react-router-dom';
 import MediaCard from '../components/MediaCard';
 import MapMarker from '../components/MapMarker';
