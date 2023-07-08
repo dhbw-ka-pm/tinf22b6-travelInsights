@@ -24,8 +24,10 @@ app.get('/api/weather/:city', async (req, res) => {
   let currentCity: City;
   if (resultCity.length > 0) {
     currentCity = resultCity[0];
-    const startDate = "2023-07-08";
-    const endDate = "2023-07-10"
+    let date = new Date();
+    const startDate = date.toISOString().substring(0, 10);
+    date.setDate(date.getDate() + 2);
+    const endDate = date.toISOString().substring(0, 10);
     try {
       const data = await axios
         .get(`https://api.open-meteo.com/v1/forecast?latitude=${currentCity.lat}&longitude=${currentCity.lng}&daily=weathercode,temperature_2m_max,temperature_2m_min&timezone=auto&start_date=${startDate}&end_date=${endDate}`);
