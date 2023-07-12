@@ -30,6 +30,7 @@
     "@hendt/xml2json": "^1.0.3",
     "@types/node": "^20.3.1",
     "@types/swagger-ui-express": "^4.1.3",
+    "@types/xml-js": "^1.0.0",
     "axios": "^1.4.0",
     "concurrently": "^8.0.1",
     "cors": "^2.8.5",
