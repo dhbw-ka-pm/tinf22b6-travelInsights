@@ -40,7 +40,7 @@ export default function MapMarker(props: {
                 </Day>`
                 ).join('\n')}
             </Weather>
-        </traveldestination>`;
+        </TravelDestination>`;
 
 
   // Download the new XML
