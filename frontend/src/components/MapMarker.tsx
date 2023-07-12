@@ -29,7 +29,7 @@ export default function MapMarker(props: {
 
   // Generate new XML
     const newXml =
-        `<traveldestination>
+        `<TravelDestination>
             <Name>${cityName}</Name>
             <Description>${cityDescription}</Description>
             <Weather>
