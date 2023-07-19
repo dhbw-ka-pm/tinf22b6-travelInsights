@@ -86,7 +86,7 @@ const LeafletMap = (): React.ReactElement => {
           <Grid
             container
             direction={'column'}
-            style={{ maxHeight: '92vh', overflow: 'auto', flexWrap: 'nowrap' }}
+            style={{ maxHeight: '93vh', overflow: 'auto', flexWrap: 'nowrap' }}
           >
             <Grid item>
               <TextField

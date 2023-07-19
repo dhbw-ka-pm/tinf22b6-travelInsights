@@ -30,7 +30,7 @@ const Welcome = (): ReactElement => {
                             value={searchTerm} 
                             onKeyDown={handleKeyDown}
                             onChange={(event) => {setSearchTerm(event.target.value)}}
-                            placeholder="Wohin geht es als nächstes?"
+                            placeholder="Where to next?"
                             InputProps={{
                                 endAdornment: (
                                 <InputAdornment position='end'>
