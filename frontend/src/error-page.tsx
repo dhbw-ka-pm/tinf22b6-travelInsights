@@ -10,7 +10,7 @@ export default function ErrorPage(): React.ReactElement {
   return <>
     {/* Header */}
     <Box display='flex' sx={{backgroundColor: theme.palette.primary.main, width:"100%", height:"15vh", justifyContent:"center"}}>
-      <Box component="img" src="Logo_bigger.png" alt={"TravelInsights Logo"} sx={{height:"15vh"}}></Box>
+      <Box component="img" src="/logo500.png" alt={"TravelInsights Logo"} sx={{height:"15vh"}}></Box>
     </Box>
 
     <div className="blurFilter">
