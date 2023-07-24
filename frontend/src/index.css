@@ -26,7 +26,7 @@ code {
   backdrop-filter: blur(10px);
   z-index: 10;
   width: 100%;
-  height: 70vh;
+  height: calc(75vh - 1px);
 }
 
 .searchBar {
@@ -42,7 +42,7 @@ code {
 .worldBackground {
   background: url('../public/worldmap2x.png') repeat-x;
   height: 75vh;
-  width: 3824px;
+  width: 500vh;
   background-size: 50% 75vh;
 
   animation: slide 30s linear infinite;
@@ -53,6 +53,6 @@ code {
     transform: translate3d(0, 0, 0);
   }
   100% {
-    transform: translate3d(-1912px, 0, 0);
+    transform: translate3d(-250vh, 0, 0);
   }
 }
