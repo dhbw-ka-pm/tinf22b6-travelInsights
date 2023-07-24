@@ -56,11 +56,11 @@ export default function MapMarker(props: {
 
   useEffect(() => {
     if (innerString.__html === "") {
-      fetch('http://localhost:4567/api/weather/' + props.city.name)
+      fetch('https://tinfbackend.freemine.de/api/weather/' + props.city.name)
         // eslint-disable-next-line @typescript-eslint/promise-function-async
         .then((response) => response.text())
         .then((weather) => {
-          fetch('http://localhost:4567/api/xslt/weather.xslt')
+          fetch('https://tinfbackend.freemine.de/api/xslt/weather.xslt')
             // eslint-disable-next-line @typescript-eslint/promise-function-async
             .then((response) => response.text())
             .then((xslt) => {
