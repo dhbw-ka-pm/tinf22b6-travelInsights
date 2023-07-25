@@ -9,9 +9,8 @@ import { RouterProvider, createBrowserRouter } from 'react-router-dom';
 import Welcome from './routes/Welcome';
 import ErrorPage from './error-page';
 import LeafletMap from './routes/LeafletMap';
-import Impressum from './routes/Impressum';
 import { ThemeProvider } from '@emotion/react';
-import {theme} from './theme';
+import { theme } from './theme';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
@@ -36,14 +35,14 @@ const router = createBrowserRouter([
   },
   {
     path: 'impressum',
-    element: <Impressum />
+    loader: async () => { window.location.href = 'https://freemine.de/impressum' }
   }
 ]);
 
 root.render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
-    <RouterProvider router={router} />
+      <RouterProvider router={router} />
     </ThemeProvider>
   </React.StrictMode>
 );
