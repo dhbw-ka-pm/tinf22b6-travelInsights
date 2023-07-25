@@ -7,7 +7,7 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "build": "tsc",
+    "build": "tsc && cp src/util/*.xml dist/util/ && cp -r xslt dist/",
     "gen:openapi": "tsoa spec-and-routes",
     "lint": "eslint --fix src/**/*.ts",
     "run:watch": "nodemon src/index.ts",
