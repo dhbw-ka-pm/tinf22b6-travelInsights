@@ -49,7 +49,7 @@ function ResponsiveAppBar(): React.ReactElement {
             </Typography>
           </Button>
           <Box sx={{ flexGrow: 1, display: 'flex' }}>
-            <Button component={Link} to={'/impressum'}
+            <Button component={Link} to={'https://freemine.de/impressum'}
                     sx={{ my: 2, color: 'white', display: 'block' }}
             >
               Impressum

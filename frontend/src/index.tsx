@@ -32,10 +32,6 @@ const router = createBrowserRouter([
         return 'Worldwide';
       }
     }
-  },
-  {
-    path: 'impressum',
-    loader: async () => { window.location.href = 'https://freemine.de/impressum' }
   }
 ]);
 
